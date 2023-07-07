@@ -4,18 +4,18 @@
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
-      <li class="nav-item">
+       <li class="nav-item">
         <sidenav-item
-          url="/dashboard-default"
-          :class="getRoute() === 'dashboard-default' ? 'active' : ''"
-          :navText="this.$store.state.isRTL ? 'لوحة القيادة' : 'Dashboard'"
+          url="/rutas"
+          :class="getRoute() === 'reparto' ? 'active' : ''"
+          :navText="'Reparto'"
         >
           <template v-slot:icon>
-            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+            <i class="fa fa-truck text-primary text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
-      <li class="nav-item">
+      </li> 
+      <!-- <li class="nav-item">
         <sidenav-item
           url="/tables"
           :class="getRoute() === 'tables' ? 'active' : ''"
@@ -38,7 +38,7 @@
             <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> 
       <li class="nav-item">
         <sidenav-item
           url="/virtual-reality"
@@ -78,7 +78,7 @@
         >
           ACCOUNT PAGES
         </h6>
-      </li>
+      </li> 
       <li class="nav-item">
         <sidenav-item
           url="/profile"
@@ -100,7 +100,7 @@
             <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> 
       <li class="nav-item">
         <sidenav-item
           url="/signup"
@@ -111,20 +111,20 @@
             <i class="ni ni-collection text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
-      </li>
+      </li> -->
     </ul>
   </div>
   <div class="pt-3 mx-3 mt-3 sidenav-footer">
-    <sidenav-card
+    <!-- <sidenav-card
       :class="cardBg"
       textPrimary="Need Help?"
       textSecondary="Please check our docs"
-    />
+    /> -->
   </div>
 </template>
 <script>
 import SidenavItem from "./SidenavItem.vue";
-import SidenavCard from "./SidenavCard.vue";
+// import SidenavCard from "./SidenavCard.vue";
 
 export default {
   name: "SidenavList",
@@ -140,7 +140,7 @@ export default {
   },
   components: {
     SidenavItem,
-    SidenavCard
+    // SidenavCard
   },
   methods: {
     getRoute() {

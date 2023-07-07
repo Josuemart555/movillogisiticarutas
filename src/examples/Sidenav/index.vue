@@ -24,7 +24,7 @@
         aria-hidden="true"
         id="iconSidenav"
       ></i>
-      <router-link class="m-0 navbar-brand" to="/">
+      <router-link class="m-0 navbar-brand" to="/panel">
         <img
           :src="
             this.$store.state.darkMode ||
@@ -35,7 +35,7 @@
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
-        <span class="ms-2 font-weight-bold me-2">Argon Dashboard 2</span>
+        <span class="ms-2 font-weight-bold me-2">Rutas Movil</span>
       </router-link>
     </div>
     <hr class="mt-0 horizontal dark" />

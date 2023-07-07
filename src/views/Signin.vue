@@ -146,7 +146,7 @@ export default {
           localStorage.usr_id = data.data.usr_id;
           
           setTimeout(() => {
-            this.$router.push({name:'Dashboard'})
+            this.$router.push({name:'Panel'})
           }, 2000);
           
         } else {

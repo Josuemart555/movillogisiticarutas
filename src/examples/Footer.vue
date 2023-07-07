@@ -67,3 +67,14 @@ export default {
   name: "app-footer",
 };
 </script>
+<style>
+  .divPrincipal {
+    position: fixed;
+  
+  bottom: 0;
+  width: 81.8%;
+  background-color: red;
+  color: white;
+  text-align: center;
+  }
+</style>
