@@ -54,12 +54,11 @@
                   <span class="text-secondary text-xs font-weight-bold">{{ ruta.realizada.rut_kgs }}</span>
                 </td>
                 <td class="align-middle">
-                  <!-- <a
-                    href="javascript:;"
+                  <a
                     class="text-secondary font-weight-bold text-xs"
                     data-toggle="tooltip"
                     data-original-title="Edit user"
-                  >Edit</a> -->
+                  >Ver</a>
                 </td>
               </tr>
             </tbody>
@@ -101,7 +100,7 @@
             
         },
         verRuta(rutaId) {
-            this.$router.push({ path: `ruta/${rutaId}` });
+            this.$router.push({ path: `ruta/${rutaId}/detalle` });
         }
     }
   };

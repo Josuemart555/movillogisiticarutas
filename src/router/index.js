@@ -9,6 +9,7 @@ import Signup from "../views/Signup.vue";
 import Signin from "../views/Signin.vue";
 import Panel from "../views/Panel.vue";
 import Rutas from "../views/Rutas";
+import RutaDetalle from "../views/RutaDetalle";
 
 const routes = [
   {
@@ -65,6 +66,11 @@ const routes = [
     path: "/rutas",
     name: "Rutas",
     component: Rutas,
+  },
+  {
+    path: "/ruta/:id/detalle",
+    name: "RutaDetalle",
+    component: RutaDetalle,
   },
   
 ];
