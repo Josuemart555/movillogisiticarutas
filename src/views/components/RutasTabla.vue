@@ -55,6 +55,7 @@
                 </td>
                 <td class="align-middle">
                   <a
+                    href="javascript:;"
                     class="text-secondary font-weight-bold text-xs"
                     data-toggle="tooltip"
                     data-original-title="Edit user"
@@ -100,7 +101,7 @@
             
         },
         verRuta(rutaId) {
-            this.$router.push({ path: `ruta/${rutaId}/detalle` });
+            this.$router.push({ name: 'RutaDetalle', params: { id: rutaId } });
         }
     }
   };
