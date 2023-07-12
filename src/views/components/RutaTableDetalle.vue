@@ -60,7 +60,7 @@
                   <span class="text-secondary text-xs font-weight-bold">${{ detalle.rut_mon_pag }}</span>
                 </td>
                 <td class="align-middle">
-                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click.prevent="openModal()" >
+                  <button type="button" class="btn btn-primary" @click.prevent="openModal(detalle)" >
                     Launch demo modal
                   </button>
                 </td>
@@ -74,14 +74,30 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <h5 class="modal-title" id="exampleModalLabel">DOC {{ detalleRuta ? detalleRuta.rut_doc_id : '' }} Total Documento: $ {{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              ...
+              <div class="mb-3">
+                <label class="form-label">Estado:</label>
+                <select class="form-select" v-model="itemRuta.est_id">
+                  <option v-for="estado in estados" :key="estado.est_id" :value="estado.est_id">{{ estado.est_nom }}</option>
+                </select>
+              </div>
+
+              <div class="form-group alert alert-info">
+                Total a cobrar: $ <span id="total-cobrar">{{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small> 
+              </div>
+
+              <div class="form-group">
+                <hr>
+                <label>Observación</label>
+                <!-- {{$ruta_completa && $ruta_completa->rut_rea_com ? 'disabled' : ''}} -->
+                <textarea class="form-control" id="obs-estado" v-model="detalleRuta.rut_obs" ></textarea>
+              </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" @click.prevent="closeModal()">Cerrar</button>
               <button type="button" class="btn btn-primary">Save changes</button>
             </div>
           </div>
@@ -100,6 +116,15 @@
     data: function() {
         return {
           detallesRutas: [],
+          detalleRuta: {
+            rut_obs: ''
+          },
+          estados: [],
+          motivos: [],
+          pagos: [],
+          itemRuta: {
+            est_id: 1
+          }
         }
     },
     mounted: function () {
@@ -122,20 +147,41 @@
                 this.detallesRutas = [];
             }
         });
+        this.getParametros();
     },
     methods: {
-      openModal () {
-            console.log("openModal");
+      openModal (item) {
             $("#modalDetalleRuta").modal('show');
-            // this.editedItem = Object.assign({}, this.defaultItem);
+            this.detalleRuta = Object.assign({}, item);
         },
         closeModal () {
-          console.log("closeModal");
             $("#modalDetalleRuta").modal('hide');
             setTimeout(() => {
-                // this.editedItem = Object.assign({}, this.defaultItem);
+                this.detalleRuta = Object.assign({});
             }, 300)
         },
+        getParametros() {
+          let bodyFormData = new FormData();
+          bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
+          bodyFormData.append("api_key", localStorage.getItem("token"));
+          
+          axios.post('http://localhost/app-9/api/rutas/parametros', bodyFormData)
+          .then( data => {
+              console.log(data);
+              if (data.data.exito) {
+                  this.estados = data.data.estados;
+                  this.motivos = data.data.motivos;
+                  this.pagos = data.data.pagos;
+              } else {
+                  this.estados = [];
+                  this.motivos = [];
+                  this.pagos = [];
+              }
+          });
+        }
+    },
+    computed: {
+      
     }
   };
   </script>

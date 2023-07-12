@@ -7,12 +7,13 @@ import "./assets/css/nucleo-svg.css";
 import ArgonDashboard from "./argon-dashboard";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
-// import vueJquery from 'vue-jquery';
+import jQuery from 'jquery';
+global.jQuery = jQuery;
+global.$ = jQuery;
 
 const appInstance = createApp(App);
 appInstance.use(store);
 appInstance.use(router);
 appInstance.use(ArgonDashboard);
-appInstance.use(VueAxios, axios)
-// appInstance.use(vueJquery);
+appInstance.use(VueAxios, axios);
 appInstance.mount("#app");
