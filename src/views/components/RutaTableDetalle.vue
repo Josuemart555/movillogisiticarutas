@@ -60,8 +60,8 @@
                   <span class="text-secondary text-xs font-weight-bold">${{ detalle.rut_mon_pag }}</span>
                 </td>
                 <td class="align-middle">
-                  <button type="button" class="btn btn-primary" @click.prevent="openModal(detalle)" >
-                    Launch demo modal
+                  <button type="button" class="btn btn-success btn-sm" @click.prevent="openModal(detalle)" >
+                    <i class="fas fa-check"></i>
                   </button>
                 </td>
               </tr>
@@ -71,7 +71,7 @@
       </div>
 
       <div class="modal fade" id="modalDetalleRuta" tabindex="-1" aria-labelledby="modalDetalleRuta" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLabel">DOC {{ detalleRuta ? detalleRuta.rut_doc_id : '' }} Total Documento: $ {{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</h5>
@@ -80,19 +80,113 @@
             <div class="modal-body">
               <div class="mb-3">
                 <label class="form-label">Estado:</label>
-                <select class="form-select" v-model="itemRuta.est_id">
+                <select class="form-select" v-model="itemRuta.est_id" @change="onChangeSelectEstado($event)">
                   <option v-for="estado in estados" :key="estado.est_id" :value="estado.est_id">{{ estado.est_nom }}</option>
                 </select>
               </div>
 
+              <div class="row hidden" id="opc-pago" name="opc-pago" v-show="mostrarPagos">
+                <div class="col-sm-12">
+                  <h4>Pagos <button class="btn btn-primary btn-sm" type="button" onclick="agregarLineaPago()" ><i class="fas fa-plus"></i></button></h4>
+                  <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                      <th>Tipo pago</th>
+                      <th>Monto</th>
+                      <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="opc-pago-body">
+                      <tr id="linea-pago-" name="linea-pago">
+                        <td class="has-success">
+                          <select class="form-control" name="pago-estado" id="pago-estado-" onchange="validarInput(this)" >
+                            <option value="">-- Seleccionar --</option>
+                            <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id">{{ pago.tip_nom }}</option>
+                          </select>
+                        </td>
+                        <td class="has-success">
+                          <input type="number" name="monto-pago" id="monto-pago-"  class="form-control" value="" onchange="validarInput(this)" >
+                        </td>
+                        <td style="display: inline-flex">
+                          <input type="hidden" name="id-pago" id="id-pago-" value="">
+                          <input type="file" id="soporte-" class="visually-hidden" onchange="validarSoporte(this, '')"  accept="image/*" value="">
+                          <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte-').click()" id="btn-soporte-" >
+                            <i class="fas fa-camera"></i>
+                          </button>
+                          <button class="btn btn-danger btn-sm" title="Eliminar pago" onclick="eliminarLineaPago(0)" >
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <hr>
+                </div>
+              </div>
+
+              <div class="form-group hidden" id="opc-prods" v-show="mostrarProductosDev">
+                <h4>Productos devueltos <button class="btn btn-primary btn-sm" type="button" onclick="agregarLineaDevolucion()" ><i class="fas fa-plus"></i></button></h4>
+                <table class="table table-condensed">
+                  <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cant</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody id="opc-dev-body">
+                    <tr id="linea-dev-" name="linea-dev">
+                      <td class="has-success">
+                        <select class="form-control" name="dev-prod" id="dev-prod-" onchange="validarSinRepetir(this)" >
+                          <option value="">-- Seleccionar --</option>
+
+                        </select>
+                      </td>
+                      <td class="has-success">
+                        <input type="number" name="cant-dev" id="cant-dev-"  class="form-control" value="" onchange="validarInput(this)" max="" >
+                        <input type="hidden" name="val-dev" id="val-dev-"  value="">
+                      </td>
+                      <td style="display: inline-flex">
+                        <button class="btn btn-danger btn-sm" title="Eliminar devolución" type="button" onclick="eliminarLineaDev('0')" >
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="hidden" id="opc-devolucion" v-show="mostrarMotivoDev">
+                <label>Motivo de devolucion</label><br>
+                <div class="form-group" >
+                  <table class="table table-condensed">
+                    <tbody>
+                    <tr>
+                      <td class="form-group has-success">
+                        <select class="form-control" id="devolucion-estado" onchange="validarInput(this)" >
+                          <option value="">-- Seleccionar --</option>
+                          <option v-for="motivo in motivos" :key="motivo.mot_id" :value="motivo.mot_id">{{ motivo.mot_nom }}</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input type="file" id="soporte-dev" class="visually-hidden" onchange="validarSoporte(this, 'dev')"  accept="image/*" value="">
+                        <button class="btn btn-success btn-sm" type="button" onclick="$('#soporte-dev').click()" id="btn-soporte-dev" >
+                          <i class="fas fa-camera"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <div class="form-group alert alert-info">
-                Total a cobrar: $ <span id="total-cobrar">{{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small> 
+                Total a cobrar: $ <span id="total-cobrar">{{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
               </div>
 
               <div class="form-group">
                 <hr>
                 <label>Observación</label>
-                <!-- {{$ruta_completa && $ruta_completa->rut_rea_com ? 'disabled' : ''}} -->
                 <textarea class="form-control" id="obs-estado" v-model="detalleRuta.rut_obs" ></textarea>
               </div>
             </div>
@@ -124,7 +218,11 @@
           pagos: [],
           itemRuta: {
             est_id: 1
-          }
+          },
+
+          mostrarPagos: false,
+          mostrarProductosDev: false,
+          mostrarMotivoDev: false,
         }
     },
     mounted: function () {
@@ -178,6 +276,20 @@
                   this.pagos = [];
               }
           });
+        },
+        onChangeSelectEstado(event) {
+          var valueSelect = event.target.value;
+
+          // est_cod = parc
+          if (valueSelect == 4) {
+            this.mostrarProductosDev = true;
+            this.mostrarMotivoDev = true;
+            this.mostrarPagos = true;
+          } else {
+            this.mostrarProductosDev = false;
+            this.mostrarMotivoDev = false;
+            this.mostrarPagos = false;
+          }
         }
     },
     computed: {
