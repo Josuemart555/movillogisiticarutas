@@ -180,6 +180,10 @@
                 </div>
               </div>
 
+              <div class="form-group alert alert-info" id="opc-desc" v-show="mostrarDescuento">
+                Total a cobrar: $ <span id="total-cobrar">0</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
+              </div>
+
               <div class="form-group alert alert-info">
                 Total a cobrar: $ <span id="total-cobrar">{{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
               </div>
@@ -192,7 +196,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click.prevent="closeModal()">Cerrar</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-primary">Guardar</button>
             </div>
           </div>
         </div>
@@ -223,6 +227,7 @@
           mostrarPagos: false,
           mostrarProductosDev: false,
           mostrarMotivoDev: false,
+          mostrarDescuento: false,
         }
     },
     mounted: function () {
@@ -280,15 +285,41 @@
         onChangeSelectEstado(event) {
           var valueSelect = event.target.value;
 
-          // est_cod = parc
-          if (valueSelect == 4) {
+          // pendiente
+          if (valueSelect == 1) {
+            this.mostrarProductosDev = false;
+            this.mostrarMotivoDev = false;
+            this.mostrarPagos = false;
+            this.mostrarDescuento = false;
+          } else if (valueSelect == 2) {
+            // entregado
+            this.mostrarProductosDev = false;
+            this.mostrarMotivoDev = false;
+            this.mostrarPagos = true;
+            this.mostrarDescuento = false;
+          } else if (valueSelect == 3) {
+            // devuelto
+            this.mostrarProductosDev = false;
+            this.mostrarMotivoDev = true;
+            this.mostrarPagos = false;
+            this.mostrarDescuento = true;
+          } else if (valueSelect == 4) {
+            // parcial
             this.mostrarProductosDev = true;
             this.mostrarMotivoDev = true;
             this.mostrarPagos = true;
+            this.mostrarDescuento = true;
+          } else if (valueSelect == 5) {
+            // en ruta
+            this.mostrarProductosDev = false;
+            this.mostrarMotivoDev = false;
+            this.mostrarPagos = false;
+            this.mostrarDescuento = false;
           } else {
             this.mostrarProductosDev = false;
             this.mostrarMotivoDev = false;
             this.mostrarPagos = false;
+            this.mostrarDescuento = false;
           }
         }
     },
