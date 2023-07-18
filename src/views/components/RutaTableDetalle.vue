@@ -97,9 +97,9 @@
                     </tr>
                     </thead>
                     <tbody id="opc-pago-body">
-                      <tr id="linea-pago-" name="linea-pago">
+                      <tr id="linea-pago-" name="linea-pago" v-for="pago in pagosDetalleLts" :key="pago.id">
                         <td class="has-success">
-                          <select class="form-control" name="pago-estado" id="pago-estado-" onchange="validarInput(this)" >
+                          <select class="form-control" name="pago-estado" id="pago-estado-" @change="validarSelectPago($event)" >
                             <option value="">-- Seleccionar --</option>
                             <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id">{{ pago.tip_nom }}</option>
                           </select>
@@ -220,6 +220,7 @@
           estados: [],
           motivos: [],
           pagos: [],
+          pagosDetalleLts: [],
           itemRuta: {
             est_id: 1
           },
@@ -251,6 +252,8 @@
             }
         });
         this.getParametros();
+
+        this.agregarPagoDetalle();
     },
     methods: {
       openModal (item) {
@@ -321,6 +324,17 @@
             this.mostrarPagos = false;
             this.mostrarDescuento = false;
           }
+        },
+        agregarPagoDetalle() {
+          let idTmp = 'TMP-' + Date.now();
+          var pagoNuevo = {
+            id: idTmp
+          };
+          this.pagosDetalleLts.push(pagoNuevo);
+        },
+        validarSelectPago(event) {
+          var valueSelect = event.target.value;
+          console.log(valueSelect)
         }
     },
     computed: {
