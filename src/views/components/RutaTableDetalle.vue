@@ -87,7 +87,42 @@
 
               <div class="row hidden" id="opc-pago" name="opc-pago" v-show="mostrarPagos">
                 <div class="col-sm-12">
-                  <h4>Pagos <button class="btn btn-primary btn-sm" type="button" onclick="agregarLineaPago()" ><i class="fas fa-plus"></i></button></h4>
+                  <h4>Pagos </h4>
+                  <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                      <th>Tipo pago</th>
+                      <th>Monto</th>
+                      <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="opc-pago-body">
+                    <tr id="linea-pago-" name="linea-pago" >
+                      <td class="has-success">
+                        <!--@change="validarSelectPago($event)"-->
+                        <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" >
+                          <option value="">-- Seleccionar --</option>
+                          <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" :selected="pago.tip_id === pago.tipo">{{ pago.tip_nom }}</option>
+                        </select>
+                      </td>
+                      <td class="has-success">
+                        <!--onchange="validarInput(this)"-->
+                        <input type="number" name="monto-pago" v-model="pagoItem.monto" class="form-control" >
+                      </td>
+                      <td style="display: inline-flex">
+                        <input type="hidden" name="id-pago" value="">
+                        <!--onchange="validarSoporte(this, '')"-->
+                        <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
+                        <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
+                          <i class="fas fa-camera"></i>
+                        </button>
+                        <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
                   <table class="table table-condensed">
                     <thead>
                     <tr>
@@ -99,21 +134,18 @@
                     <tbody id="opc-pago-body">
                       <tr id="linea-pago-" name="linea-pago" v-for="pago in pagosDetalleLts" :key="pago.id">
                         <td class="has-success">
-                          <select class="form-control" name="pago-estado" id="pago-estado-" @change="validarSelectPago($event)" >
+                          <!--@change="validarSelectPago($event)"-->
+                          <select class="form-control" name="pago-estado" v-model="pago.tipo" :disabled="true" >
                             <option value="">-- Seleccionar --</option>
-                            <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id">{{ pago.tip_nom }}</option>
+                            <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" >{{ pago.tip_nom }}</option>
                           </select>
                         </td>
                         <td class="has-success">
-                          <input type="number" name="monto-pago" id="monto-pago-"  class="form-control" value="" onchange="validarInput(this)" >
+                          <!--onchange="validarInput(this)"-->
+                          <input type="number" name="monto-pago" :value="pago.monto" class="form-control" :disabled="true" >
                         </td>
                         <td style="display: inline-flex">
-                          <input type="hidden" name="id-pago" id="id-pago-" value="">
-                          <input type="file" id="soporte-" class="visually-hidden" onchange="validarSoporte(this, '')"  accept="image/*" value="">
-                          <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte-').click()" id="btn-soporte-" >
-                            <i class="fas fa-camera"></i>
-                          </button>
-                          <button class="btn btn-danger btn-sm" title="Eliminar pago" onclick="eliminarLineaPago(0)" >
+                          <button class="btn btn-danger btn-sm" title="Eliminar pago" @click.prevent="eliminarPagoDetalle(pago)" >
                             <i class="fas fa-times"></i>
                           </button>
                         </td>
@@ -224,6 +256,16 @@
           itemRuta: {
             est_id: 1
           },
+          pagoItem: {
+            id: '',
+            tipo: '',
+            monto: 0,
+          },
+          pagoDefault: {
+            id: '',
+            tipo: '',
+            monto: 0,
+          },
 
           mostrarPagos: false,
           mostrarProductosDev: false,
@@ -253,7 +295,6 @@
         });
         this.getParametros();
 
-        this.agregarPagoDetalle();
     },
     methods: {
       openModal (item) {
@@ -326,16 +367,40 @@
           }
         },
         agregarPagoDetalle() {
-          let idTmp = 'TMP-' + Date.now();
-          var pagoNuevo = {
-            id: idTmp
-          };
-          this.pagosDetalleLts.push(pagoNuevo);
+
+          if (!this.pagoItem.tipo && !this.pagoItem.monto) {
+            alert("Debe ingresar tipo y monto!");
+          } else {
+            if (!this.pagoItem.id) {
+              let idTmp = 'TMP-' + Date.now();
+              this.pagoItem.id = idTmp;
+            }
+            console.log(this.pagoItem)
+            this.pagosDetalleLts.push(this.pagoItem);
+
+            this.pagoItem = Object.assign({}, this.pagoDefault);
+
+          }
+
+        },
+        eliminarPagoDetalle(item) {
+
+          const objWithIdIndex = this.pagosDetalleLts.findIndex((obj) => obj.id === item.id);
+
+          if (objWithIdIndex > -1) {
+            this.pagosDetalleLts.splice(objWithIdIndex, 1);
+          }
+
         },
         validarSelectPago(event) {
           var valueSelect = event.target.value;
           console.log(valueSelect)
-        }
+        },
+        onSelectFile(e){
+
+          this.pagoItem.soporte = e.target.files[0];
+
+        },
     },
     computed: {
       
