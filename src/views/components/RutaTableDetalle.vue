@@ -157,7 +157,7 @@
               </div>
 
               <div class="form-group hidden" id="opc-prods" v-show="mostrarProductosDev">
-                <h4>Productos devueltos <button class="btn btn-primary btn-sm" type="button" onclick="agregarLineaDevolucion()" ><i class="fas fa-plus"></i></button></h4>
+                <h4>Productos devueltos </h4>
                 <table class="table table-condensed">
                   <thead>
                   <tr>
@@ -169,17 +169,49 @@
                   <tbody id="opc-dev-body">
                     <tr id="linea-dev-" name="linea-dev">
                       <td class="has-success">
-                        <select class="form-control" name="dev-prod" id="dev-prod-" onchange="validarSinRepetir(this)" >
+                        <!-- onchange="validarSinRepetir(this)" -->
+                        <select class="form-control" name="dev-prod" v-model="productoDevItem.pro_cod" >
                           <option value="">-- Seleccionar --</option>
-
+                          <option v-for="producto in productosDetalleRutaLts" :key="producto.NULIDO" :value="producto.NULIDO">{{ producto.NOKOPR }}</option>
                         </select>
                       </td>
                       <td class="has-success">
-                        <input type="number" name="cant-dev" id="cant-dev-"  class="form-control" value="" onchange="validarInput(this)" max="" >
-                        <input type="hidden" name="val-dev" id="val-dev-"  value="">
+                        <!-- onchange="validarInput(this)" -->
+                        <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cantidad" max="" >
+                        <input type="hidden" name="val-dev" id="val-dev" value="">
                       </td>
                       <td style="display: inline-flex">
-                        <button class="btn btn-danger btn-sm" title="Eliminar devolución" type="button" onclick="eliminarLineaDev('0')" >
+                        <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarProductoDevolucion()" >
+                          <i class="fas fa-plus"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table class="table table-condensed">
+                  <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cant</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody id="opc-dev-body">
+                    <tr id="linea-dev" name="linea-dev" v-for="productoDev in productosDevueltosLts" :key="productoDev.pro_cod">
+                      <td class="has-success">
+                        <!-- onchange="validarSinRepetir(this)" -->
+                        <select class="form-control" name="dev-prod" id="dev-prod" v-model="productoDev.pro_cod" :disabled="true" >
+                          <option value="">-- Seleccionar --</option>
+                          <option v-for="producto in productosDetalleRutaLts" :key="producto.NULIDO" :value="producto.NULIDO">{{ producto.NOKOPR }}</option>
+                        </select>
+                      </td>
+                      <td class="has-success">
+                        <!-- onchange="validarInput(this)" -->
+                        <input type="number" class="form-control" v-model="productoDev.cantidad" max="" :disabled="true" >
+                        <!-- <input type="hidden" name="val-dev" id="val-dev"  value=""> -->
+                      </td>
+                      <td style="display: inline-flex">
+                        <button class="btn btn-danger btn-sm" title="Eliminar devolución" type="button" @click.prevent="eliminarProductoDev(productoDev)" >
                           <i class="fas fa-times"></i>
                         </button>
                       </td>
@@ -253,6 +285,8 @@
           motivos: [],
           pagos: [],
           pagosDetalleLts: [],
+          productosDetalleRutaLts: [],
+          productosDevueltosLts: [],
           itemRuta: {
             est_id: 1
           },
@@ -264,7 +298,19 @@
           pagoDefault: {
             id: '',
             tipo: '',
+            val: 0,
+          },
+          productoDevItem: {
+            pro_cod: '',
+            cantidad: 0,
             monto: 0,
+            lin: 0
+          },
+          productoDevDefault: {
+            pro_cod: '',
+            cantidad: 0,
+            val: 0,
+            lin: 0
           },
 
           mostrarPagos: false,
@@ -286,7 +332,6 @@
         
         axios.post('http://localhost/app-9/api/rutas/detalleRuta', bodyFormData)
         .then( data => {
-            console.log(data);
             if (data.data.exito) {
                 this.detallesRutas = data.data.docs;
             } else {
@@ -299,6 +344,7 @@
     methods: {
       openModal (item) {
             $("#modalDetalleRuta").modal('show');
+            this.getDetalleRuta(item);
             this.detalleRuta = Object.assign({}, item);
         },
         closeModal () {
@@ -314,7 +360,6 @@
           
           axios.post('http://localhost/app-9/api/rutas/parametros', bodyFormData)
           .then( data => {
-              console.log(data);
               if (data.data.exito) {
                   this.estados = data.data.estados;
                   this.motivos = data.data.motivos;
@@ -323,6 +368,22 @@
                   this.estados = [];
                   this.motivos = [];
                   this.pagos = [];
+              }
+          });
+        },
+        getDetalleRuta(detalleRuta) {
+          let bodyFormData = new FormData();
+          bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
+          bodyFormData.append("api_key", localStorage.getItem("token"));
+          bodyFormData.append("rut_doc_id", detalleRuta.rut_det_id);
+          bodyFormData.append("rut_doc_tip", detalleRuta.rut_doc_tip);
+
+          axios.post('http://localhost/app-9/api/rutas/detalleDoc', bodyFormData)
+          .then( data => {
+              if (data.data.exito) {
+                this.productosDetalleRutaLts = data.data.detalle;
+              } else {
+                this.productosDetalleRutaLts = [];
               }
           });
         },
@@ -368,17 +429,33 @@
         },
         agregarPagoDetalle() {
 
-          if (!this.pagoItem.tipo && !this.pagoItem.monto) {
-            alert("Debe ingresar tipo y monto!");
+          if (!this.pagoItem.tipo || !this.pagoItem.monto) {
+            alert("Debe ingresar tipo ó monto!");
           } else {
             if (!this.pagoItem.id) {
               let idTmp = 'TMP-' + Date.now();
               this.pagoItem.id = idTmp;
             }
-            console.log(this.pagoItem)
             this.pagosDetalleLts.push(this.pagoItem);
 
             this.pagoItem = Object.assign({}, this.pagoDefault);
+
+          }
+
+        },
+        agregarProductoDevolucion() {
+
+          if (!this.productoDevItem.pro_cod || !this.productoDevItem.cantidad) {
+            alert("Debe seleccionar producto ó ingresar cantidad!");
+          } else {
+
+            if (this.validarNorePetidoProdDev(this.productoDevItem)) {
+              alert("No se puede agregar un producto repetido!")    
+            } else {
+              this.productosDevueltosLts.push(this.productoDevItem);
+
+              this.productoDevItem = Object.assign({}, this.productoDevDefault);
+            }
 
           }
 
@@ -392,15 +469,37 @@
           }
 
         },
+        eliminarProductoDev(item) {
+        
+          const objWithIdIndex = this.productosDevueltosLts.findIndex((obj) => obj.pro_cod === item.pro_cod);
+          
+          if (objWithIdIndex > -1) {
+            this.productosDevueltosLts.splice(objWithIdIndex, 1);
+          }
+
+        },
         validarSelectPago(event) {
           var valueSelect = event.target.value;
-          console.log(valueSelect)
+          console.log(valueSelect);
         },
         onSelectFile(e){
 
           this.pagoItem.soporte = e.target.files[0];
 
         },
+        validarNorePetidoProdDev(item) {
+
+          if (this.productosDevueltosLts.length > 0) {
+
+            const objRepetido = this.productosDevueltosLts.find((obj) => obj.pro_cod === item.pro_cod);
+
+            if (objRepetido) {
+              return true;
+            }
+          }
+          return false;
+
+        }
     },
     computed: {
       
