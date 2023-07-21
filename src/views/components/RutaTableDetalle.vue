@@ -170,14 +170,14 @@
                     <tr id="linea-dev-" name="linea-dev">
                       <td class="has-success">
                         <!-- onchange="validarSinRepetir(this)" -->
-                        <select class="form-control" name="dev-prod" v-model="productoDevItem.pro_cod" >
+                        <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" >
                           <option value="">-- Seleccionar --</option>
-                          <option v-for="producto in productosDetalleRutaLts" :key="producto.NULIDO" :value="producto.NULIDO">{{ producto.NOKOPR }}</option>
+                          <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
                         </select>
                       </td>
                       <td class="has-success">
                         <!-- onchange="validarInput(this)" -->
-                        <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cantidad" max="" >
+                        <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
                         <input type="hidden" name="val-dev" id="val-dev" value="">
                       </td>
                       <td style="display: inline-flex">
@@ -197,17 +197,17 @@
                   </tr>
                   </thead>
                   <tbody id="opc-dev-body">
-                    <tr id="linea-dev" name="linea-dev" v-for="productoDev in productosDevueltosLts" :key="productoDev.pro_cod">
+                    <tr id="linea-dev" name="linea-dev" v-for="productoDev in productosDevueltosLts" :key="productoDev.pro">
                       <td class="has-success">
                         <!-- onchange="validarSinRepetir(this)" -->
-                        <select class="form-control" name="dev-prod" id="dev-prod" v-model="productoDev.pro_cod" :disabled="true" >
+                        <select class="form-control" name="dev-prod" id="dev-prod" v-model="productoDev.prod" :disabled="true" >
                           <option value="">-- Seleccionar --</option>
-                          <option v-for="producto in productosDetalleRutaLts" :key="producto.NULIDO" :value="producto.NULIDO">{{ producto.NOKOPR }}</option>
+                          <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
                         </select>
                       </td>
                       <td class="has-success">
                         <!-- onchange="validarInput(this)" -->
-                        <input type="number" class="form-control" v-model="productoDev.cantidad" max="" :disabled="true" >
+                        <input type="number" class="form-control" v-model="productoDev.cant" max="" :disabled="true" >
                         <!-- <input type="hidden" name="val-dev" id="val-dev"  value=""> -->
                       </td>
                       <td style="display: inline-flex">
@@ -227,7 +227,8 @@
                     <tbody>
                     <tr>
                       <td class="form-group has-success">
-                        <select class="form-control" id="devolucion-estado" onchange="validarInput(this)" >
+                        <!-- onchange="validarInput(this)"  -->
+                        <select class="form-control" id="devolucion-estado" v-model="itemRuta.motivo_dev" >
                           <option value="">-- Seleccionar --</option>
                           <option v-for="motivo in motivos" :key="motivo.mot_id" :value="motivo.mot_id">{{ motivo.mot_nom }}</option>
                         </select>
@@ -260,7 +261,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" @click.prevent="closeModal()">Cerrar</button>
-              <button type="button" class="btn btn-primary">Guardar</button>
+              <button type="button" class="btn btn-primary" @click.prevent="guardarEstadoRutaDetalle()">Guardar</button>
             </div>
           </div>
         </div>
@@ -288,7 +289,8 @@
           productosDetalleRutaLts: [],
           productosDevueltosLts: [],
           itemRuta: {
-            est_id: 1
+            est_id: 1,
+            motivo_dev: ''
           },
           pagoItem: {
             id: '',
@@ -301,17 +303,18 @@
             val: 0,
           },
           productoDevItem: {
-            pro_cod: '',
-            cantidad: 0,
-            monto: 0,
-            lin: 0
+            prod: '',
+            cant: 0,
+            val: 0,
+            lin: ''
           },
           productoDevDefault: {
-            pro_cod: '',
-            cantidad: 0,
+            prod: '',
+            cant: 0,
             val: 0,
-            lin: 0
+            lin: ''
           },
+          detalleRutaDoc: {},
 
           mostrarPagos: false,
           mostrarProductosDev: false,
@@ -372,6 +375,7 @@
           });
         },
         getDetalleRuta(detalleRuta) {
+          this.detalleRutaDoc = detalleRuta;
           let bodyFormData = new FormData();
           bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
           bodyFormData.append("api_key", localStorage.getItem("token"));
@@ -445,13 +449,21 @@
         },
         agregarProductoDevolucion() {
 
-          if (!this.productoDevItem.pro_cod || !this.productoDevItem.cantidad) {
+          if (!this.productoDevItem.prod || !this.productoDevItem.cant) {
             alert("Debe seleccionar producto ó ingresar cantidad!");
           } else {
 
             if (this.validarNorePetidoProdDev(this.productoDevItem)) {
-              alert("No se puede agregar un producto repetido!")    
+              alert("No se puede agregar un producto repetido!");   
+            } else if (this.validarCantidadProDev(this.productoDevItem)) {
+              alert("No se puede ingresar una cantidad mayor del producto!");
             } else {
+
+              const obj = this.productosDetalleRutaLts.find((obj) => obj.KOPRCT === this.productoDevItem.prod);
+
+              this.productoDevItem.lin = obj.NULIDO;
+              this.productoDevItem.val = parseInt(obj.PPPRBR) * this.productoDevItem.cant;
+
               this.productosDevueltosLts.push(this.productoDevItem);
 
               this.productoDevItem = Object.assign({}, this.productoDevDefault);
@@ -491,7 +503,7 @@
 
           if (this.productosDevueltosLts.length > 0) {
 
-            const objRepetido = this.productosDevueltosLts.find((obj) => obj.pro_cod === item.pro_cod);
+            const objRepetido = this.productosDevueltosLts.find((obj) => obj.prod === item.prod);
 
             if (objRepetido) {
               return true;
@@ -499,11 +511,87 @@
           }
           return false;
 
+        },
+        validarCantidadProDev(item) {
+
+          const obj = this.productosDetalleRutaLts.find((obj) => obj.KOPRCT === item.prod);
+
+          if (item.cant > obj.CAPRCO2) {
+            return true;
+          }
+
+          return false;
+
+        },
+        ingresoValoresProDev() {
+          console.log('entro metodo = ', this.productoDevItem);
+          if (this.productoDevItem) {
+            console.log('entro if item');
+            const obj = this.productosDetalleRutaLts.find((obj) => obj.KOPRCT === this.productoDevItem.prod);
+            console.log('obj = ', obj);
+            if (obj) {
+              console.log('entro if obj');
+              
+              this.productoDevItem.lin = obj.NULIDO;
+              
+              this.productoDevItem.val = parseInt(obj.PPPRBR) * this.productoDevItem.cant;
+              console.log('this.productoDevItem modificado = ', this.productoDevItem);
+            }
+            
+          } else {
+            console.log('entra else');
+            this.productoDevItem = Object.assign({}, this.productoDevDefault);
+          }
+        },
+        guardarEstadoRutaDetalle() {
+
+          let bodyFormData = new FormData();
+          bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
+          bodyFormData.append("api_key", localStorage.getItem("token"));
+          bodyFormData.append("id", this.detalleRutaDoc.rut_det_id);
+
+          const objEstado = this.estados.find((obj) => obj.est_id == this.itemRuta.est_id);
+          if (objEstado) {
+            bodyFormData.append("estado", objEstado.est_cod); 
+          }
+          bodyFormData.append("dev", this.itemRuta.motivo_dev);
+
+          for (let i = 0; i < this.pagosDetalleLts.length; i++) {
+            const pago = this.pagosDetalleLts[i];
+            bodyFormData.append(`pagos[${i}][tipo]`, pago.tipo);
+            bodyFormData.append(`pagos[${i}][monto]`, pago.monto);
+            pago.soporte && bodyFormData.append(`pagos[${i}][soporte]`, pago.soporte);
+            pago.pag_id && bodyFormData.append(`pagos[${i}][pag_id]`, pago.pag_id);
+          }
+
+          for (let i = 0; i < this.productosDevueltosLts.length; i++) {
+            const dev = this.productosDevueltosLts[i];
+            bodyFormData.append(`devs[${i}][prod]`, dev.prod);
+            bodyFormData.append(`devs[${i}][cant]`, dev.cant);
+            bodyFormData.append(`devs[${i}][val]` , dev.val );
+            bodyFormData.append(`devs[${i}][lin]` , dev.lin );
+          }
+
+          // bodyFormData.append("pagos", this.pagosDetalleLts);
+          // bodyFormData.append("devs", this.productosDevueltosLts);
+
+          // for (const [key, value] of bodyFormData) {
+          //   console.log('»', key, value)
+          // }
+
+          axios.post('http://localhost/app-9/api/rutas/cambioEstadoDelPedido', bodyFormData)
+          .then( data => {
+              if (data.data.exito) {
+                console.log(data); 
+                this.closeModal();
+              }
+          });
+
         }
     },
     computed: {
       
-    }
+    },
   };
   </script>
   
