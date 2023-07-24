@@ -234,7 +234,7 @@
                         </select>
                       </td>
                       <td>
-                        <input type="file" id="soporte-dev" class="visually-hidden" onchange="validarSoporte(this, 'dev')"  accept="image/*" value="">
+                        <input type="file" id="soporte-dev" class="visually-hidden" accept="image/*" @change="onSelectFileMotivoDev($event)">
                         <button class="btn btn-success btn-sm" type="button" onclick="$('#soporte-dev').click()" id="btn-soporte-dev" >
                           <i class="fas fa-camera"></i>
                         </button>
@@ -499,6 +499,11 @@
           this.pagoItem.soporte = e.target.files[0];
 
         },
+        onSelectFileMotivoDev(e){
+
+          this.itemRuta.soporte = e.target.files[0];
+
+        },
         validarNorePetidoProdDev(item) {
 
           if (this.productosDevueltosLts.length > 0) {
@@ -545,6 +550,36 @@
         },
         guardarEstadoRutaDetalle() {
 
+          // pendiente
+          if (this.itemRuta.est_id == 1) {
+            console.log('entro pendiente guardar');
+          } else if (this.itemRuta.est_id == 2) {
+            // entregado
+            if (this.pagosDetalleLts.length < 0) {
+              alert('Tiene que ingresar los pagos realizados!');
+              return;
+            }
+          } else if (this.itemRuta.est_id == 3) {
+            // devuelto
+            if (!this.itemRuta.est_id)  {
+              alert('Debe seleccionar un motivo de devolucion!');
+              return;
+            }
+          } else if (this.itemRuta.est_id == 4) {
+            // parcial
+            if (!this.itemRuta.est_id)  {
+              alert('Debe seleccionar un motivo de devolucion!');
+              return;
+            }
+            if (this.pagosDetalleLts.length < 0) {
+              alert('Tiene que ingresar los pagos realizados!');
+              return;
+            }
+          } else if (this.itemRuta.est_id == 5) {
+            // en ruta
+            console.log('entro en ruta guardar');
+          }
+
           let bodyFormData = new FormData();
           bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
           bodyFormData.append("api_key", localStorage.getItem("token"));
@@ -555,6 +590,7 @@
             bodyFormData.append("estado", objEstado.est_cod); 
           }
           bodyFormData.append("dev", this.itemRuta.motivo_dev);
+          bodyFormData.append("soporteDev", this.itemRuta.soporte);
 
           for (let i = 0; i < this.pagosDetalleLts.length; i++) {
             const pago = this.pagosDetalleLts[i];
