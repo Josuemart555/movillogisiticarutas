@@ -10,6 +10,7 @@ import Signin from "../views/Signin.vue";
 import Panel from "../views/Panel.vue";
 import Rutas from "../views/Rutas";
 import RutaDetalle from "../views/RutaDetalle";
+import Cierre from "../views/Cierre.vue";
 
 const routes = [
   {
@@ -72,7 +73,11 @@ const routes = [
     name: "RutaDetalle",
     component: RutaDetalle,
   },
-  
+  {
+    path: "/cierre",
+    name: "Cierre",
+    component: Cierre,
+  },
 ];
 
 const router = createRouter({
