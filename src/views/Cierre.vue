@@ -4,15 +4,7 @@
       <div class="card-header pb-0">
         <div class="pe-md-3 d-flex align-items-center ms-md-auto">
           <div class="input-group">
-            <!-- <input
-              type="date"
-              class="form-control"
-              v-model="fechaInput"
-              @keydown.enter.prevent="obtenerRutas()"
-            />
-            <button class="btn btn-sm mb-0 shadow-sm input-group-text" @click="obtenerRutas">
-              <i class="fas fa-search" aria-hidden="true"></i>
-            </button> -->
+
           </div>
         </div>
       </div>
@@ -20,7 +12,7 @@
         <div class="col-12 row">
           <div class="col-6 ">
             <div class="table-responsive p-0 ms-3">
-              <h4>Cierres TransBank </h4>
+              <h4>Billetes/Monedas </h4>
               <table class="table table-sm table-condensed">
                 <thead>
                 <tr>
