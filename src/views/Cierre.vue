@@ -90,7 +90,17 @@
                   <td class="text-end">
                     Total
                   </td>
-                  <td class="text-end">1562135</td>
+                  <td class="text-end">
+                    {{efectivo["20000"] * 20000
+                     +  efectivo['10000'] * 10000 
+                    + efectivo['5000'] * 5000 
+                  + efectivo['2000'] * 2000 
+                + efectivo['1000'] * 1000 
+              + efectivo['500'] * 500
+            + efectivo['100'] * 100 
+          + efectivo['50'] * 50 
+        + efectivo['10'] * 10}}
+                  </td>
                 </tr>
                 </tbody>
               </table>
