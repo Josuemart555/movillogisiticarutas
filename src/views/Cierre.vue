@@ -18,11 +18,10 @@
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="col-12 row">
-          <div class="col-3 ">
-          </div>
           <div class="col-6 ">
-            <div class="table-responsive p-0">
-              <table class="table">
+            <div class="table-responsive p-0 ms-3">
+              <h4>Cierres TransBank </h4>
+              <table class="table table-sm table-condensed">
                 <thead>
                 <tr>
                   <th scope="col">Valor</th>
@@ -34,63 +33,63 @@
                 <tr>
                   <th scope="row" class="text-end">20.000</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['20000']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]" v-model="efectivo['20000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo["20000"] * 20000 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">10.000</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['10000']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['10000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['10000'] * 10000 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">5.000</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['5000']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['5000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['5000'] * 5000 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">2.000</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['2000']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['2000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['2000'] * 2000 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">1.000</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['1000']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['1000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['1000'] * 1000 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">500</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['500']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['500']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['500'] * 500 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">100</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['100']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['100']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['100'] * 100 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">50</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['50']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['50']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['50'] * 50 }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">10</th>
                   <td>
-                    <input type="number" class="form-control" v-model="efectivo['10']" >
+                    <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['10']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
                   <td class="text-end">{{ efectivo['10'] * 10 }}</td>
                 </tr>
@@ -105,7 +104,113 @@
               </table>
             </div>
           </div>
-          <div class="col-3 ">
+          <div class="col-6 row">
+            <div class="col-12">
+              <div class="form-group table-responsive">
+                <h4>Depositos MAE </h4>
+                <table class="table table-sm table-condensed">
+                  <thead>
+                  <tr>
+                    <th>No Dep</th>
+                    <th>Fecha/Hora</th>
+                    <th>Monto</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody id="opc-dev-body">
+                  <tr id="linea-dev-" name="linea-dev">
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="depositoMaeItem.num" >
+                    </td>
+                    <td class="has-success">
+                      <input type="date" class="form-control" v-model="depositoMaeItem.fec" >
+                    </td>
+                    <td class="has-success">
+                      <input type="number" class="form-control" v-model="depositoMaeItem.mon" >
+                    </td>
+                    <td style="display: inline-flex">
+                      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <table class="table table-condensed">
+                  <tbody id="opc-dev-body">
+                  <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="depositoMae.num" :disabled="true" >
+                    </td>
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
+                    </td>
+                    <td class="has-success">
+                      <input type="number" class="form-control" v-model="depositoMae.mon" :disabled="true" >
+                    </td>
+                    <td style="display: inline-flex">
+                      <button class="btn btn-danger btn-sm" title="Eliminar deposito" type="button" @click.prevent="eliminarDepositoMae(depositoMae)" >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group table-responsive">
+                <h4>Cierres TransBank </h4>
+                <table class="table table-sm table-condensed">
+                  <thead>
+                  <tr>
+                    <th>Terminal</th>
+                    <th>Fecha/Hora</th>
+                    <th>Monto</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody id="opc-dev-body">
+                  <tr id="linea-dev-" name="linea-dev">
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="cierreTransBankItem.cod" >
+                    </td>
+                    <td class="has-success">
+                      <input type="date" class="form-control" v-model="cierreTransBankItem.fec" >
+                    </td>
+                    <td class="has-success">
+                      <input type="number" class="form-control" v-model="cierreTransBankItem.mon" >
+                    </td>
+                    <td style="display: inline-flex">
+                      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarCierreTransBank()" >
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <table class="table table-condensed">
+                  <tbody id="opc-dev-body">
+                  <tr id="linea-dev" name="linea-dev" v-for="cierreTransBank in cierresTransBankLts" :key="cierreTransBank.cod">
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="cierreTransBank.cod" :disabled="true" >
+                    </td>
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="cierreTransBank.fec" :disabled="true" >
+                    </td>
+                    <td class="has-success">
+                      <input type="number" class="form-control" v-model="cierreTransBank.mon" :disabled="true" >
+                    </td>
+                    <td style="display: inline-flex">
+                      <button class="btn btn-danger btn-sm" title="Eliminar cierre" type="button" @click.prevent="eliminarCierreTransBank(cierreTransBank)" >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -132,10 +237,106 @@ export default {
         50: 0,
         10: 0
       },
+
+      depositosMaeLts: [],
+      depositoMaeItem: {
+        num: '',
+        fec: '',
+        mon: 0,
+      },
+      depositoMaeDefault: {
+        num: '',
+        fec: '',
+        mon: 0,
+      },
+
+      cierresTransBankLts: [],
+      cierreTransBankItem: {
+        cod: '',
+        fec: '',
+        mon: 0,
+      },
+      cierreTransBankDefault: {
+        cod: '',
+        fec: '',
+        mon: 0,
+      }
     }
   },
   methods: {
+    agregarDepositoMae() {
+      if (!this.depositoMaeItem.num) {
+        alert('Debe ingresar el numero deposito');
+        return;
+      }
+      if (!this.depositoMaeItem.fec) {
+        alert('Debe ingresar la fecha deposito');
+        return;
+      }
+      if (!this.depositoMaeItem.mon) {
+        alert('Debe ingresar el mont deposito');
+        return;
+      }
 
+      this.depositosMaeLts.push(this.depositoMaeItem);
+      this.depositoMaeItem = Object.assign({}, this.depositoMaeDefault);
+
+    },
+    eliminarDepositoMae(item) {
+      const objWithIdIndex = this.depositosMaeLts.findIndex((obj) => obj.num === item.num);
+
+      if (objWithIdIndex > -1) {
+        this.depositosMaeLts.splice(objWithIdIndex, 1);
+      }
+    },
+    agregarCierreTransBank() {
+      if (!this.cierreTransBankItem.cod) {
+        alert('Debe ingresar el codigo de cierre');
+        return;
+      }
+      if (!this.cierreTransBankItem.fec) {
+        alert('Debe ingresar la fecha de cierre');
+        return;
+      }
+      if (!this.cierreTransBankItem.mon) {
+        alert('Debe ingresar el monto de cierre');
+        return;
+      }
+
+      this.cierresTransBankLts.push(this.cierreTransBankItem);
+      this.cierreTransBankItem = Object.assign({}, this.cierreTransBankDefault);
+
+    },
+    eliminarCierreTransBank(item) {
+      const objWithIdIndex = this.cierresTransBankLts.findIndex((obj) => obj.cod === item.cod);
+
+      if (objWithIdIndex > -1) {
+        this.cierresTransBankLts.splice(objWithIdIndex, 1);
+      }
+    },
+    noPermitirIngresoNumeroNegativo(evento) {
+      const elemento = evento.target;
+      const teclaPresionada = evento.key;
+      const teclaPresionadaEsUnNumero =
+          Number.isInteger(parseInt(teclaPresionada));
+
+      const sePresionoUnaTeclaNoAdmitida =
+          teclaPresionada != 'ArrowDown' &&
+          teclaPresionada != 'ArrowUp' &&
+          teclaPresionada != 'ArrowLeft' &&
+          teclaPresionada != 'ArrowRight' &&
+          teclaPresionada != 'Backspace' &&
+          teclaPresionada != 'Delete' &&
+          teclaPresionada != 'Enter' &&
+          !teclaPresionadaEsUnNumero;
+      const comienzaPorCero =
+          elemento.value.length === 0 &&
+          teclaPresionada == 0;
+
+      if (sePresionoUnaTeclaNoAdmitida || comienzaPorCero) {
+        evento.preventDefault();
+      }
+    }
   }
 }
 </script>
