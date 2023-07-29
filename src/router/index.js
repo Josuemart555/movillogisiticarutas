@@ -74,7 +74,7 @@ const routes = [
     component: RutaDetalle,
   },
   {
-    path: "/cierre",
+    path: "/ruta/cierre/:id",
     name: "Cierre",
     component: Cierre,
   },

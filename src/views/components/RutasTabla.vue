@@ -37,7 +37,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="ruta in rutas" :key="ruta.rut_id" v-on:click="verRuta(ruta.rut_id)">
+              <tr v-for="ruta in rutas" :key="ruta.rut_id" >
                 <td>
                     <span class="text-secondary text-xs font-weight-bold">{{ ruta.sucursal.suc_nom }}</span>
                 </td>
@@ -54,12 +54,12 @@
                   <span class="text-secondary text-xs font-weight-bold">{{ ruta.realizada.rut_kgs }}</span>
                 </td>
                 <td class="align-middle">
-                  <a
-                    href="javascript:;"
-                    class="text-secondary font-weight-bold text-xs"
-                    data-toggle="tooltip"
-                    data-original-title="Edit user"
-                  >Ver</a>
+                  <button class="btn btn-success btn-sm" data-toggle="tooltip" v-on:click="verRuta(ruta.rut_id)">
+                    Ver
+                  </button>
+                  <button type="button" title="Cierre" class="btn btn-success btn-sm" @click.prevent="irCierre(ruta.rut_id)" >
+                    Cierre
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -102,6 +102,9 @@
         },
         verRuta(rutaId) {
             this.$router.push({ name: 'RutaDetalle', params: { id: rutaId } });
+        },
+        irCierre(rutaId) {
+          this.$router.push({ name: 'Cierre', params: { id: rutaId } });
         }
     }
   };

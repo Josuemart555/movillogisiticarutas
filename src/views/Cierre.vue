@@ -216,11 +216,19 @@
           </div>
         </div>
       </div>
+      <div class="card-footer text-end">
+        <button type="button" class="btn btn-success" @click.prevent="guardarCierre()">
+          <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M48 96V416c0 8.8 7.2 16 16 16H384c8.8 0 16-7.2 16-16V170.5c0-4.2-1.7-8.3-4.7-11.3l33.9-33.9c12 12 18.7 28.3 18.7 45.3V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H309.5c17 0 33.3 6.7 45.3 18.7l74.5 74.5-33.9 33.9L320.8 84.7c-.3-.3-.5-.5-.8-.8V184c0 13.3-10.7 24-24 24H104c-13.3 0-24-10.7-24-24V80H64c-8.8 0-16 7.2-16 16zm80-16v80H272V80H128zm32 240a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z"/></svg>
+          Guardar
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: 'cierre',
   mounted: function () {
@@ -338,6 +346,52 @@ export default {
       if (sePresionoUnaTeclaNoAdmitida || comienzaPorCero) {
         evento.preventDefault();
       }
+    },
+    guardarCierre() {
+
+      let bodyFormData = new FormData();
+      bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
+      bodyFormData.append("api_key", localStorage.getItem("token"));
+
+      var rut_id = null;
+      if (this.$route.params.id) {
+        rut_id = this.$route.params.id;
+      }
+      bodyFormData.append("rut_id", rut_id);
+
+      for (let i = 0; i < this.efectivo.length; i++) {
+        const dev = this.efectivo[i];
+        console.log(dev)
+
+      }
+
+      // bodyFormData.append(`efectivo`, this.efectivo);
+      for ( var key in this.efectivo ) {
+        bodyFormData.append(`efectivo[${key}]`, this.efectivo[key]);
+      }
+
+      for (let i = 0; i < this.depositosMaeLts.length; i++) {
+        const dev = this.depositosMaeLts[i];
+        bodyFormData.append(`mae[${i}][num]`, dev.num);
+        bodyFormData.append(`mae[${i}][fec]`, dev.fec);
+        bodyFormData.append(`mae[${i}][mon]`, dev.mon);
+      }
+
+      for (let i = 0; i < this.depositosMaeLts.length; i++) {
+        const dev = this.depositosMaeLts[i];
+        bodyFormData.append(`tb[${i}][cod]`, dev.cod);
+        bodyFormData.append(`tb[${i}][fec]`, dev.fec);
+        bodyFormData.append(`tb[${i}][mon]`, dev.mon);
+      }
+
+      axios.post('http://localhost/app-9/api/rutas/guardarCierre', bodyFormData)
+      .then( data => {
+        if (data.data.exito) {
+          console.log(data);
+          this.$router.push({ name: 'Cierre', params: { id: rut_id } });
+        }
+      });
+
     }
   }
 }
