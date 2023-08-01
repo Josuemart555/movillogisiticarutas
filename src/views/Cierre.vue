@@ -232,7 +232,7 @@ import axios from "axios";
 export default {
   name: 'cierre',
   mounted: function () {
-
+    this.getCierre();
   },
   data: function () {
     return {
@@ -346,6 +346,26 @@ export default {
       if (sePresionoUnaTeclaNoAdmitida || comienzaPorCero) {
         evento.preventDefault();
       }
+    },
+    getCierre() {
+
+      let bodyFormData = new FormData();
+      bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
+      bodyFormData.append("api_key", localStorage.getItem("token"));
+      var rut_id = null;
+      if (this.$route.params.id) {
+        rut_id = this.$route.params.id;
+      }
+      bodyFormData.append("rut_id", rut_id);
+
+      axios.post('http://localhost/app-9/api/rutas/getCierre', bodyFormData)
+          .then( data => {
+            if (data.data.exito) {
+              console.log(data);
+              this.$router.push({ name: 'Cierre', params: { id: rut_id } });
+            }
+          });
+
     },
     guardarCierre() {
 
