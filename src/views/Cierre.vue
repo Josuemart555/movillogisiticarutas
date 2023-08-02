@@ -10,7 +10,7 @@
       </div>
       <div class="card-body px-0 pt-0 pb-2">
         <div class="col-12 row">
-          <div class="col-6 ">
+          <div class="col-12 ">
             <div class="table-responsive p-0 ms-3">
               <h4>Billetes/Monedas </h4>
               <table class="table table-sm table-condensed">
@@ -106,61 +106,60 @@
               </table>
             </div>
           </div>
-          <div class="col-6 row">
-            <div class="col-12">
-              <div class="form-group table-responsive">
-                <h4>Depositos MAE </h4>
-                <table class="table table-sm table-condensed">
-                  <thead>
-                  <tr>
-                    <th>No Dep</th>
-                    <th>Fecha/Hora</th>
-                    <th>Monto</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody id="opc-dev-body">
-                  <tr id="linea-dev-" name="linea-dev">
-                    <td class="has-success">
-                      <input type="text" class="form-control" v-model="depositoMaeItem.num" >
-                    </td>
-                    <td class="has-success">
-                      <input type="date" class="form-control" v-model="depositoMaeItem.fec" >
-                    </td>
-                    <td class="has-success">
-                      <input type="number" class="form-control" v-model="depositoMaeItem.mon" >
-                    </td>
-                    <td style="display: inline-flex">
-                      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >
-                        <i class="fas fa-plus"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-                <table class="table table-condensed">
-                  <tbody id="opc-dev-body">
-                  <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
-                    <td class="has-success">
-                      <input type="text" class="form-control" v-model="depositoMae.num" :disabled="true" >
-                    </td>
-                    <td class="has-success">
-                      <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
-                    </td>
-                    <td class="has-success">
-                      <input type="number" class="form-control" v-model="depositoMae.mon" :disabled="true" >
-                    </td>
-                    <td style="display: inline-flex">
-                      <button class="btn btn-danger btn-sm" title="Eliminar deposito" type="button" @click.prevent="eliminarDepositoMae(depositoMae)" >
-                        <i class="fas fa-times"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
+          <div class="col-12">
+            <div class="form-group table-responsive">
+              <h4>Depositos MAE </h4>
+              <table class="table table-sm table-condensed">
+                <thead>
+                <tr>
+                  <th>No Dep</th>
+                  <th>Fecha/Hora</th>
+                  <th>Monto</th>
+                  <th></th>
+                </tr>
+                </thead>
+                <tbody id="opc-dev-body">
+                <tr id="linea-dev-" name="linea-dev">
+                  <td class="has-success">
+                    <input type="text" class="form-control" v-model="depositoMaeItem.num" >
+                  </td>
+                  <td class="has-success">
+                    <input type="date" class="form-control" v-model="depositoMaeItem.fec" >
+                  </td>
+                  <td class="has-success">
+                    <input type="number" class="form-control" v-model="depositoMaeItem.mon" >
+                  </td>
+                  <td style="display: inline-flex">
+                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <table class="table table-condensed">
+                <tbody id="opc-dev-body">
+                <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
+                  <td class="has-success">
+                    <input type="text" class="form-control" v-model="depositoMae.num" :disabled="true" >
+                  </td>
+                  <td class="has-success">
+                    <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
+                  </td>
+                  <td class="has-success">
+                    <input type="number" class="form-control" v-model="depositoMae.mon" :disabled="true" >
+                  </td>
+                  <td style="display: inline-flex">
+                    <button class="btn btn-danger btn-sm" title="Eliminar deposito" type="button" @click.prevent="eliminarDepositoMae(depositoMae)" >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="col-12">
+          </div>
+          <div class="col-12">
               <div class="form-group table-responsive">
                 <h4>Cierres TransBank </h4>
                 <table class="table table-sm table-condensed">
@@ -213,7 +212,6 @@
                 </table>
               </div>
             </div>
-          </div>
         </div>
       </div>
       <div class="card-footer text-end">
