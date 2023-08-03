@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="card-body px-0 pt-0 pb-2">
-        <div class="col-12 row">
+        <div class="col-12 row container">
           <div class="col-12 ">
             <div class="table-responsive p-0 ms-3">
               <h4>Billetes/Monedas </h4>
@@ -221,11 +221,168 @@
         </button>
       </div>
     </div>
+
+    <div class="modal fade" id="modalResuemnCierre" tabindex="-1" aria-labelledby="modalResuemnCierre" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Resumen </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="col-12 row container">
+              <div class="col-12 ">
+                <div class="table-responsive p-0 ms-3">
+                  <h4>Billetes/Monedas </h4>
+                  <table class="table table-sm table-condensed">
+                    <thead>
+                    <tr>
+                      <th scope="col">Valor</th>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">cantidad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <th scope="row" class="text-end">20.000</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]" v-model="efectivo['20000']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo["20000"] * 20000 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">10.000</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['10000']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['10000'] * 10000 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">5.000</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['5000']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['5000'] * 5000 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">2.000</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['2000']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['2000'] * 2000 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">1.000</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['1000']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['1000'] * 1000 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">500</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['500']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['500'] * 500 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">100</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['100']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['100'] * 100 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">50</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['50']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['50'] * 50 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end">10</th>
+                      <td>
+                        <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['10']" @keypress="noPermitirIngresoNumeroNegativo($event)" disabled >
+                      </td>
+                      <td class="text-end">{{ efectivo['10'] * 10 }}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row" class="text-end"></th>
+                      <td class="text-end">
+                        Total
+                      </td>
+                      <td class="text-end">
+                        {{efectivo["20000"] * 20000
+                         +  efectivo['10000'] * 10000 
+                        + efectivo['5000'] * 5000 
+                      + efectivo['2000'] * 2000 
+                    + efectivo['1000'] * 1000 
+                  + efectivo['500'] * 500
+                + efectivo['100'] * 100 
+              + efectivo['50'] * 50 
+            + efectivo['10'] * 10}}
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-group table-responsive">
+                  <h4>Depositos MAE </h4>
+                  <table class="table table-condensed">
+                    <tbody id="opc-dev-body">
+                    <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
+                      <td class="has-success">
+                        <input type="text" class="form-control" v-model="depositoMae.num" :disabled="true" >
+                      </td>
+                      <td class="has-success">
+                        <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
+                      </td>
+                      <td class="has-success">
+                        <input type="number" class="form-control" v-model="depositoMae.mon" :disabled="true" >
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-12">
+                  <div class="form-group table-responsive">
+                    <h4>Cierres TransBank </h4>
+                    <table class="table table-condensed">
+                      <tbody id="opc-dev-body">
+                      <tr id="linea-dev" name="linea-dev" v-for="cierreTransBank in cierresTransBankLts" :key="cierreTransBank.cod">
+                        <td class="has-success">
+                          <input type="text" class="form-control" v-model="cierreTransBank.cod" :disabled="true" >
+                        </td>
+                        <td class="has-success">
+                          <input type="text" class="form-control" v-model="cierreTransBank.fec" :disabled="true" >
+                        </td>
+                        <td class="has-success">
+                          <input type="number" class="form-control" v-model="cierreTransBank.mon" :disabled="true" >
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-primary" @click.prevent="redireccionACierre()">Aceptar</button> -->
+            <a class="btn btn-primary" :href="'/ruta/cierre/'+this.$route.params.id" >Aceptar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import $ from 'jquery';
 
 export default {
   name: 'cierre',
@@ -360,7 +517,37 @@ export default {
           .then( data => {
             if (data.data.exito) {
               console.log(data);
-              this.$router.push({ name: 'Cierre', params: { id: rut_id } });
+              this.efectivo[10] = data.data.efectivo.cant_10;
+              this.efectivo[50] = data.data.efectivo.cant_50;
+              this.efectivo[100] = data.data.efectivo.cant_100;
+              this.efectivo[500] = data.data.efectivo.cant_500;
+              this.efectivo[1000] = data.data.efectivo.cant_1000;
+              this.efectivo[2000] = data.data.efectivo.cant_2000;
+              this.efectivo[5000] = data.data.efectivo.cant_5000;
+              this.efectivo[10000] = data.data.efectivo.cant_10000;
+              this.efectivo[20000] = data.data.efectivo.cant_20000;
+
+              for (let index = 0; index < data.data.mae.length; index++) {
+                const element = data.data.mae[index];
+                let mae = {
+                  num: element.mae_num,
+                  mon: element.mae_mon,
+                  fec: element.mae_fec
+                };
+                this.depositosMaeLts.push(mae);                
+              }
+
+              for (let index = 0; index < data.data.tb.length; index++) {
+                const element = data.data.tb[index];
+                console.log(element);
+                let tb = {
+                  cod: element.tb_cod,
+                  mon: element.tb_mon,
+                  fec: element.tb_fec
+                }
+                this.cierresTransBankLts.push(tb);
+              }
+              // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
             }
           });
 
@@ -405,10 +592,27 @@ export default {
       axios.post('http://localhost/app-9/api/rutas/guardarCierre', bodyFormData)
       .then( data => {
         if (data.data.exito) {
+          console.log('entro if exitoso');
           console.log(data);
-          this.$router.push({ name: 'Cierre', params: { id: rut_id } });
+          $("#modalResuemnCierre").modal('show');
+          // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
         }
       });
+
+    },
+    redireccionACierre() {
+      console.log('entra en metodo');
+      var rut_id = null;
+      if (this.$route.params.id) {
+        rut_id = this.$route.params.id;
+        console.log('rut_id', rut_id);
+      }
+      $("#modalResuemnCierre").modal('hide');
+      setTimeout(() => {
+        this.$router.push({ name: 'Cierre', params: { id: rut_id } });
+      }, 300);
+      // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
+      // window.location.href = 'http://localhost:8080/ruta/cierre/'+rut_id;
 
     }
   }

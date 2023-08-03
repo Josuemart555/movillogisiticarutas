@@ -60,7 +60,7 @@
                   <span class="text-secondary text-xs font-weight-bold">${{ detalle.rut_mon_pag }}</span>
                 </td>
                 <td class="align-middle">
-                  <button type="button" class="btn btn-success btn-sm" @click.prevent="openModal(detalle)" >
+                  <button type="button" v-bind:class="claseBotonRutaDetalle(detalle)" @click.prevent="openModal(detalle)" >
                     <i class="fas fa-check"></i>
                   </button>
                 </td>
@@ -623,7 +623,21 @@
               }
           });
 
-        }
+        },
+        claseBotonRutaDetalle(item) {
+          console.log(item);
+          if (item.rut_est_id == 2) {
+            // entregado
+            return 'btn btn-success btn-sm';
+          } else if (item.rut_est_id == 3) {
+            // devuelto
+            return 'btn btn-danger btn-sm';
+          } else if (item.rut_est_id == 4) {
+            // parcial
+            return 'btn btn-warning btn-sm';
+          }
+          return 'btn btn-success btn-sm';
+        },
     },
     computed: {
       
