@@ -554,6 +554,14 @@ export default {
     },
     guardarCierre() {
 
+      this.$swal.fire({
+        title: 'Espera por favor...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+      });
+      this.$swal.showLoading();
+
       let bodyFormData = new FormData();
       bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
       bodyFormData.append("api_key", localStorage.getItem("token"));
@@ -594,9 +602,22 @@ export default {
         if (data.data.exito) {
           console.log('entro if exitoso');
           console.log(data);
-          $("#modalResuemnCierre").modal('show');
+          this.$swal.close();
+          this.$swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Your work has been saved',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          setTimeout( function () {
+            $("#modalResuemnCierre").modal('show');
+          }, 500);
           // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
         }
+      }).catch( err => {
+        console.error(err)
+        this.$swal.close();
       });
 
     },

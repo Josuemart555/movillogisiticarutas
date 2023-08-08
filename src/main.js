@@ -10,10 +10,15 @@ import VueAxios from 'vue-axios';
 import jQuery from 'jquery';
 global.jQuery = jQuery;
 global.$ = jQuery;
+import VueSweetalert2 from 'vue-sweetalert2';
+
+// If you don't need the styles, do not connect
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const appInstance = createApp(App);
 appInstance.use(store);
 appInstance.use(router);
 appInstance.use(ArgonDashboard);
 appInstance.use(VueAxios, axios);
+appInstance.use(VueSweetalert2);
 appInstance.mount("#app");

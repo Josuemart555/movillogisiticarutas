@@ -84,6 +84,14 @@
     methods: {
         obtenerRutas() {
 
+            this.$swal.fire({
+              title: 'Espera por favor...',
+              allowEscapeKey: false,
+              allowOutsideClick: false,
+              timerProgressBar: true,
+            });
+            this.$swal.showLoading();
+
             let bodyFormData = new FormData();
             bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
             bodyFormData.append("api_key", localStorage.getItem("token"));
@@ -98,6 +106,7 @@
                     this.rutas = [];
                 }
             });
+            this.$swal.close();
             
         },
         verRuta(rutaId) {

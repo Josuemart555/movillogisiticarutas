@@ -550,6 +550,14 @@
         },
         guardarEstadoRutaDetalle() {
 
+          this.$swal.fire({
+            title: 'Espera por favor...',
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            timerProgressBar: true,
+          });
+          this.$swal.showLoading();
+
           // pendiente
           if (this.itemRuta.est_id == 1) {
             console.log('entro pendiente guardar');
@@ -618,9 +626,22 @@
           axios.post('http://localhost/app-9/api/rutas/cambioEstadoDelPedido', bodyFormData)
           .then( data => {
               if (data.data.exito) {
-                console.log(data); 
-                this.closeModal();
+                console.log(data);
+                this.$swal.close();
+                this.$swal.fire({
+                  position: 'top-end',
+                  icon: 'success',
+                  title: 'Your work has been saved',
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                setTimeout( function () {
+                  this.closeModal();
+                }, 500);
               }
+          }).catch( err => {
+            console.error(err)
+            this.$swal.close();
           });
 
         },
