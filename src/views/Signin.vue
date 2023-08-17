@@ -146,7 +146,7 @@ export default {
           localStorage.usr_id = data.data.usr_id;
           
           setTimeout(() => {
-            this.$router.push({name:'Panel'})
+            this.$router.push({name:'Rutas'})
           }, 2000);
           
         } else {
@@ -154,6 +154,8 @@ export default {
           this.error = true;
           this.error_msg = data.data.error;
         }
+      }).catch( err => {
+        alert(err);
       });
 
     }

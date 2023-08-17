@@ -62,6 +62,13 @@
                   </button>
                 </td>
               </tr>
+              <tr v-if="rutas.length === 0">
+                <td>
+                  <argon-alert color="info" icon="ni ni-like-2 ni-lg" >
+                    No se encontraron rutas
+                  </argon-alert>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -71,8 +78,10 @@
   
   <script>
   import axios from 'axios';
+  import ArgonAlert from "@/components/ArgonAlert.vue";
   export default {
     name: "rutas-table",
+    components: {ArgonAlert},
     data: function() {
         return {
             fechaInput: null,
@@ -80,6 +89,25 @@
             error: false,
             error_msg: ""
         }
+    },
+    created() {
+      // crea un nuevo objeto `Date`
+      var today = new Date();
+
+      // `getDate()` devuelve el día del mes (del 1 al 31)
+      var day = today.getDate();
+
+      // `getMonth()` devuelve el mes (de 0 a 11)
+      var month = today.getMonth() + 1;
+
+      // `getFullYear()` devuelve el año completo
+      var year = today.getFullYear();
+
+      // muestra la fecha de hoy en formato `MM/DD/YYYY`
+      console.log(`${year}/${month}/${day}`);
+
+      this.fechaInput = `${year}-0${month}-${day}`;
+      this.obtenerRutas();
     },
     methods: {
         obtenerRutas() {
