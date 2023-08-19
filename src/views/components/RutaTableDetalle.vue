@@ -337,10 +337,23 @@
         .then( data => {
             if (data.data.exito) {
                 this.detallesRutas = data.data.docs;
+                this.$swal.fire({
+                  icon: "info",
+                  title: "Ruta Detalles Obtenidas",
+                  text: false,
+                  timer: false
+                });
             } else {
                 this.detallesRutas = [];
             }
-        });
+        }).catch( err => {
+          this.$swal.fire({
+            icon: "error",
+            title: "Error al obtener ruta detalles",
+            text: err,
+            timer: false
+          });
+        });;
         this.getParametros();
 
     },
@@ -386,10 +399,23 @@
           .then( data => {
               if (data.data.exito) {
                 this.productosDetalleRutaLts = data.data.detalle;
+                this.$swal.fire({
+                  icon: "info",
+                  title: "Detalle Obtenido",
+                  text: false,
+                  timer: false
+                });
               } else {
                 this.productosDetalleRutaLts = [];
               }
-          });
+          }).catch( err => {
+            this.$swal.fire({
+              icon: "error",
+              title: "Error al obtener detalle",
+              text: err,
+              timer: false
+            });
+          });;
         },
         onChangeSelectEstado(event) {
           var valueSelect = event.target.value;
@@ -616,13 +642,6 @@
             bodyFormData.append(`devs[${i}][lin]` , dev.lin );
           }
 
-          // bodyFormData.append("pagos", this.pagosDetalleLts);
-          // bodyFormData.append("devs", this.productosDevueltosLts);
-
-          // for (const [key, value] of bodyFormData) {
-          //   console.log('»', key, value)
-          // }
-
           axios.post('http://localhost/app-9/api/rutas/cambioEstadoDelPedido', bodyFormData)
           .then( data => {
               if (data.data.exito) {
@@ -646,7 +665,6 @@
 
         },
         claseBotonRutaDetalle(item) {
-          console.log(item);
           if (item.rut_est_id == 2) {
             // entregado
             return 'btn btn-success btn-sm';

@@ -18,7 +18,7 @@
                 <tr>
                   <th scope="col">Valor</th>
                   <th scope="col">Cantidad</th>
-                  <th scope="col">cantidad</th>
+                  <th scope="col">Total</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -239,7 +239,7 @@
                     <tr>
                       <th scope="col">Valor</th>
                       <th scope="col">Cantidad</th>
-                      <th scope="col">cantidad</th>
+                      <th scope="col">Total</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -606,7 +606,7 @@ export default {
           this.$swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: 'Your work has been saved',
+            title: 'Guardado con Exito',
             showConfirmButton: false,
             timer: 1500
           });
@@ -617,6 +617,12 @@ export default {
         }
       }).catch( err => {
         console.error(err)
+        this.$swal.fire({
+          icon: "error",
+          title: "Error al guardar",
+          text: err,
+          timer: false
+        });
         this.$swal.close();
       });
 
