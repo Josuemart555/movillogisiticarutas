@@ -4,7 +4,9 @@
       <div class="card-header pb-0">
         <div class="pe-md-3 d-flex align-items-center ms-md-auto">
           <div class="input-group">
-
+            <a :href="'/rutas'" class="btn btn-primary btn-sm" >
+              <i class="fas fa-arrow-left"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -139,22 +141,30 @@
               </table>
               <table class="table table-condensed">
                 <tbody id="opc-dev-body">
-                <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
-                  <td class="has-success">
-                    <input type="text" class="form-control" v-model="depositoMae.num" :disabled="true" >
-                  </td>
-                  <td class="has-success">
-                    <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
-                  </td>
-                  <td class="has-success">
-                    <input type="number" class="form-control" v-model="depositoMae.mon" :disabled="true" >
-                  </td>
-                  <td style="display: inline-flex">
-                    <button class="btn btn-danger btn-sm" title="Eliminar deposito" type="button" @click.prevent="eliminarDepositoMae(depositoMae)" >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </td>
-                </tr>
+                  <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="depositoMae.num" :disabled="true" >
+                    </td>
+                    <td class="has-success">
+                      <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
+                    </td>
+                    <td class="has-success">
+                      <input type="number" class="form-control" v-model="depositoMae.mon" :disabled="true" >
+                    </td>
+                    <td style="display: inline-flex">
+                      <button class="btn btn-danger btn-sm" title="Eliminar deposito" type="button" @click.prevent="eliminarDepositoMae(depositoMae)" >
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr id="linea-dev">
+                    <td colspan="2" class="has-success text-end">
+                      Total
+                    </td>
+                    <td class="has-success">
+                      <span v-text="sumaDeopsitos"></span>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -190,24 +200,32 @@
                   </tr>
                   </tbody>
                 </table>
-                <table class="table table-condensed">
+                <table class="table table-condensed table-responsive table-bordered">
                   <tbody id="opc-dev-body">
-                  <tr id="linea-dev" name="linea-dev" v-for="cierreTransBank in cierresTransBankLts" :key="cierreTransBank.cod">
-                    <td class="has-success">
-                      <input type="text" class="form-control" v-model="cierreTransBank.cod" :disabled="true" >
-                    </td>
-                    <td class="has-success">
-                      <input type="text" class="form-control" v-model="cierreTransBank.fec" :disabled="true" >
-                    </td>
-                    <td class="has-success">
-                      <input type="number" class="form-control" v-model="cierreTransBank.mon" :disabled="true" >
-                    </td>
-                    <td style="display: inline-flex">
-                      <button class="btn btn-danger btn-sm" title="Eliminar cierre" type="button" @click.prevent="eliminarCierreTransBank(cierreTransBank)" >
-                        <i class="fas fa-times"></i>
-                      </button>
-                    </td>
-                  </tr>
+                    <tr id="linea-dev" name="linea-dev" v-for="cierreTransBank in cierresTransBankLts" :key="cierreTransBank.cod">
+                      <td class="has-success">
+                        <input type="text" class="form-control" v-model="cierreTransBank.cod" :disabled="true" >
+                      </td>
+                      <td class="has-success">
+                        <input type="text" class="form-control" v-model="cierreTransBank.fec" :disabled="true" >
+                      </td>
+                      <td class="has-success">
+                        <input type="number" class="form-control" v-model="cierreTransBank.mon" :disabled="true" >
+                      </td>
+                      <td style="display: inline-flex">
+                        <button class="btn btn-danger btn-sm" title="Eliminar cierre" type="button" @click.prevent="eliminarCierreTransBank(cierreTransBank)" >
+                          <i class="fas fa-times"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr id="linea-dev">
+                      <td colspan="2" class="has-success text-end">
+                        Total
+                      </td>
+                      <td class="has-success">
+                        <span v-text="sumaCierre"></span>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -642,6 +660,25 @@ export default {
       // window.location.href = 'http://localhost:8080/ruta/cierre/'+rut_id;
 
     }
+  },
+  computed: {
+    sumaCierre() {
+      let suma = 0;
+      for (let i = 0; i < this.cierresTransBankLts.length; i++) {
+        const obj = this.cierresTransBankLts[i];
+        suma += obj.mon;
+      }
+      return suma;
+    },
+    sumaDeopsitos() {
+      let suma = 0;
+      for (let i = 0; i < this.depositosMaeLts.length; i++) {
+        const obj = this.depositosMaeLts[i];
+        console.log(obj);
+        suma += obj.mon;
+      }
+      return suma;
+    },
   }
 }
 </script>

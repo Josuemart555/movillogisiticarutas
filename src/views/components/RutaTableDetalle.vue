@@ -12,6 +12,9 @@
             <button class="btn btn-sm mb-0 shadow-sm input-group-text" @click="obtenerRutas">
               <i class="fas fa-search" aria-hidden="true"></i>
             </button> -->
+            <a :href="'/rutas'" class="btn btn-primary btn-sm" >
+              <i class="fas fa-arrow-left"></i>
+            </a>
           </div>
         </div>
       </div>
