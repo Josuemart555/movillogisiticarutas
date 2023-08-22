@@ -93,13 +93,16 @@
     },
     created() {
 
-      var date = moment().format('YYYY-MM-DD');
+      var fechaLocalStorage = localStorage.getItem('fechaInputRutas');
+      var date = fechaLocalStorage ? fechaLocalStorage : moment().format('YYYY-MM-DD');
 
       this.fechaInput = date;
       this.obtenerRutas();
     },
     methods: {
         obtenerRutas() {
+
+            localStorage.removeItem('fechaInputRutas');
 
             this.$swal.fire({
               title: 'Espera por favor...',
@@ -113,11 +116,13 @@
             bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
             bodyFormData.append("api_key", localStorage.getItem("token"));
             bodyFormData.append("fec", this.fechaInput);
+
+            localStorage.setItem('fechaInputRutas', this.fechaInput);
            
             axios.post('http://localhost/app-9/api/rutas/getRutasPorUsuario', bodyFormData)
             .then( data => {
                 console.log(data);
-                if (data.data.exito) {
+                if (data.data.exito && data.data.rutas.length > 0) {
                     this.rutas = data.data.rutas;
                     this.$swal.fire({
                       icon: "info",
@@ -127,6 +132,12 @@
                     });
                 } else {
                     this.rutas = [];
+                  this.$swal.fire({
+                    icon: "info",
+                    title: "No se encontraron rutas",
+                    text: false,
+                    timer: false
+                  });
                 }
             }).catch( err => {
               this.$swal.fire({

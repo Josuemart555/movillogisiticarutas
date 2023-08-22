@@ -109,36 +109,83 @@
             </div>
           </div>
           <div class="col-12">
-            <div class="form-group table-responsive">
-              <h4>Depositos MAE </h4>
-              <table class="table table-sm table-condensed">
-                <thead>
-                <tr>
-                  <th>No Dep</th>
-                  <th>Fecha/Hora</th>
-                  <th>Monto</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody id="opc-dev-body">
-                <tr id="linea-dev-" name="linea-dev">
-                  <td class="has-success">
-                    <input type="text" class="form-control" v-model="depositoMaeItem.num" >
-                  </td>
-                  <td class="has-success">
-                    <input type="date" class="form-control" v-model="depositoMaeItem.fec" >
-                  </td>
-                  <td class="has-success">
-                    <input type="number" class="form-control" v-model="depositoMaeItem.mon" >
-                  </td>
-                  <td style="display: inline-flex">
-                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >
-                      <i class="fas fa-plus"></i>
-                    </button>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
+            <div class="">
+              <div class="col-12 row">
+                <div class="col-8">
+                  <h4>Depositos MAE </h4>
+                </div>
+                <div class="col-4">
+                  <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMaeModalOpen()" >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="modal fade" id="modalAgregarDepositoMAE" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Agregar Deposito MAR </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="col-12 row container">
+                        <div class="col-12 ">
+                          <div class="col-md-6">
+                            <label for="example-text-input" class="form-control-label">No. Deposito</label>
+                            <input type="text" class="form-control" v-model="depositoMaeItem.num" >
+                          </div>
+                          <div class="col-md-6">
+                            <label for="example-text-input" class="form-control-label">Fecha/Hora</label>
+                            <input type="date" class="form-control" v-model="depositoMaeItem.fec" >
+                          </div>
+                          <div class="col-md-6">
+                            <label for="example-text-input" class="form-control-label">Monto</label>
+                            <input type="number" class="form-control" v-model="depositoMaeItem.mon" >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrrarDepositoMaeModalOpen()" >
+                        Cancelar
+                      </button>
+                      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >
+                        Guardar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!--<table class="table table-sm table-condensed">-->
+              <!--  <thead>-->
+              <!--  <tr>-->
+              <!--    <th>No Dep</th>-->
+              <!--    <th>Fecha/Hora</th>-->
+              <!--    <th>Monto</th>-->
+              <!--    <th></th>-->
+              <!--  </tr>-->
+              <!--  </thead>-->
+              <!--  <tbody id="opc-dev-body">-->
+              <!--  <tr id="linea-dev-" name="linea-dev">-->
+              <!--    <td class="has-success">-->
+              <!--      <input type="text" class="form-control" v-model="depositoMaeItem.num" >-->
+              <!--    </td>-->
+              <!--    <td class="has-success">-->
+              <!--      <input type="date" class="form-control" v-model="depositoMaeItem.fec" >-->
+              <!--    </td>-->
+              <!--    <td class="has-success">-->
+              <!--      <input type="number" class="form-control" v-model="depositoMaeItem.mon" >-->
+              <!--    </td>-->
+              <!--    <td style="display: inline-flex">-->
+              <!--      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >-->
+              <!--        <i class="fas fa-plus"></i>-->
+              <!--      </button>-->
+              <!--    </td>-->
+              <!--  </tr>-->
+              <!--  </tbody>-->
+              <!--</table>-->
               <table class="table table-condensed">
                 <tbody id="opc-dev-body">
                   <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
@@ -157,7 +204,7 @@
                       </button>
                     </td>
                   </tr>
-                  <tr id="linea-dev">
+                  <tr id="linea-dev" v-if="depositosMaeLts.length > 0">
                     <td colspan="2" class="has-success text-end">
                       Total
                     </td>
@@ -171,35 +218,82 @@
           </div>
           <div class="col-12">
               <div class="form-group table-responsive">
-                <h4>Cierres TransBank </h4>
-                <table class="table table-sm table-condensed">
-                  <thead>
-                  <tr>
-                    <th>Terminal</th>
-                    <th>Fecha/Hora</th>
-                    <th>Monto</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody id="opc-dev-body">
-                  <tr id="linea-dev-" name="linea-dev">
-                    <td class="has-success">
-                      <input type="text" class="form-control" v-model="cierreTransBankItem.cod" >
-                    </td>
-                    <td class="has-success">
-                      <input type="date" class="form-control" v-model="cierreTransBankItem.fec" >
-                    </td>
-                    <td class="has-success">
-                      <input type="number" class="form-control" v-model="cierreTransBankItem.mon" >
-                    </td>
-                    <td style="display: inline-flex">
-                      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarCierreTransBank()" >
-                        <i class="fas fa-plus"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
+                <div class="col-12 row">
+                  <div class="col-8">
+                    <h4>Cierres TransBank </h4>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarCierreTransBankOpenModal()" >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="modal fade" id="modalAgregarCierreBank" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Agregar Cierre TransBank </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="col-12 row container">
+                          <div class="col-12 ">
+                            <div class="col-md-6">
+                              <label for="example-text-input" class="form-control-label">Terminal</label>
+                              <input type="text" class="form-control" v-model="cierreTransBankItem.cod" >
+                            </div>
+                            <div class="col-md-6">
+                              <label for="example-text-input" class="form-control-label">Fecha/Hora</label>
+                              <input type="date" class="form-control" v-model="cierreTransBankItem.fec" >
+                            </div>
+                            <div class="col-md-6">
+                              <label for="example-text-input" class="form-control-label">Monto</label>
+                              <input type="number" class="form-control" v-model="cierreTransBankItem.mon" >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrarCierreBankModalOpen()" >
+                          Cancelar
+                        </button>
+                        <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarCierreTransBank()" >
+                          Guardar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--<table class="table table-sm table-condensed">-->
+                <!--  <thead>-->
+                <!--  <tr>-->
+                <!--    <th>Terminal</th>-->
+                <!--    <th>Fecha/Hora</th>-->
+                <!--    <th>Monto</th>-->
+                <!--    <th></th>-->
+                <!--  </tr>-->
+                <!--  </thead>-->
+                <!--  <tbody id="opc-dev-body">-->
+                <!--  <tr id="linea-dev-" name="linea-dev">-->
+                <!--    <td class="has-success">-->
+                <!--      <input type="text" class="form-control" v-model="cierreTransBankItem.cod" >-->
+                <!--    </td>-->
+                <!--    <td class="has-success">-->
+                <!--      <input type="date" class="form-control" v-model="cierreTransBankItem.fec" >-->
+                <!--    </td>-->
+                <!--    <td class="has-success">-->
+                <!--      <input type="number" class="form-control" v-model="cierreTransBankItem.mon" >-->
+                <!--    </td>-->
+                <!--    <td style="display: inline-flex">-->
+                <!--      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarCierreTransBank()" >-->
+                <!--        <i class="fas fa-plus"></i>-->
+                <!--      </button>-->
+                <!--    </td>-->
+                <!--  </tr>-->
+                <!--  </tbody>-->
+                <!--</table>-->
                 <table class="table table-condensed table-responsive table-bordered">
                   <tbody id="opc-dev-body">
                     <tr id="linea-dev" name="linea-dev" v-for="cierreTransBank in cierresTransBankLts" :key="cierreTransBank.cod">
@@ -218,7 +312,7 @@
                         </button>
                       </td>
                     </tr>
-                    <tr id="linea-dev">
+                    <tr id="linea-dev" v-if="cierresTransBankLts.length > 0">
                       <td colspan="2" class="has-success text-end">
                         Total
                       </td>
@@ -463,7 +557,24 @@ export default {
 
       this.depositosMaeLts.push(this.depositoMaeItem);
       this.depositoMaeItem = Object.assign({}, this.depositoMaeDefault);
+      $("#modalAgregarDepositoMAE").modal('hide');
 
+    },
+    agregarDepositoMaeModalOpen() {
+      this.depositoMaeItem = Object.assign({}, this.depositoMaeDefault);
+      $("#modalAgregarDepositoMAE").modal('show');
+    },
+    cerrarDepositoMaeModalOpen() {
+      this.depositoMaeItem = Object.assign({}, this.depositoMaeDefault);
+      $("#modalAgregarDepositoMAE").modal('hide');
+    },
+    agregarCierreTransBankOpenModal() {
+      this.depositoMaeItem = Object.assign({}, this.depositoMaeDefault);
+      $("#modalAgregarCierreBank").modal('show');
+    },
+    cerrarCierreBankModalOpen() {
+      this.cierreTransBankItem = Object.assign({}, this.cierreTransBankDefault);
+      $("#modalAgregarCierreBank").modal('hide');
     },
     eliminarDepositoMae(item) {
       const objWithIdIndex = this.depositosMaeLts.findIndex((obj) => obj.num === item.num);
@@ -488,6 +599,7 @@ export default {
 
       this.cierresTransBankLts.push(this.cierreTransBankItem);
       this.cierreTransBankItem = Object.assign({}, this.cierreTransBankDefault);
+      $("#modalAgregarCierreBank").modal('hide');
 
     },
     eliminarCierreTransBank(item) {
