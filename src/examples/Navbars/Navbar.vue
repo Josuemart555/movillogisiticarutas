@@ -35,20 +35,24 @@
         </div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
-            <router-link
-              :to="{ name: 'Signin' }"
-              class="px-0 nav-link font-weight-bold text-white"
-              target="_blank"
-            >
-              <i
-                class="fa fa-user"
-                :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-2'"
-              ></i>
-              <span v-if="this.$store.state.isRTL" class="d-sm-inline d-none"
-                >يسجل دخول</span
-              >
-              <span v-else class="d-sm-inline d-none">Cerrar Sesión</span>
-            </router-link>
+            <!--<router-link-->
+            <!--  :to="{ name: 'Signin' }"-->
+            <!--  class="px-0 nav-link font-weight-bold text-white"-->
+            <!--  target="_blank"-->
+            <!--&gt;-->
+            <!--  <i-->
+            <!--    class="fa fa-user"-->
+            <!--    :class="this.$store.state.isRTL ? 'ms-sm-2' : 'me-sm-2'"-->
+            <!--  ></i>-->
+            <!--  <span v-if="this.$store.state.isRTL" class="d-sm-inline d-none"-->
+            <!--    >يسجل دخول</span-->
+            <!--  >-->
+            <!--  <span v-else class="d-sm-inline d-none">Cerrar Sesión</span>-->
+            <!--</router-link>-->
+            <a href="#" class="px-0 nav-link font-weight-bold text-white" @click.prevent="cerrarSesion()">
+              <i class="fa fa-user"></i>
+              Cerrar Sesión
+            </a>
           </li>
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
             <a
@@ -219,7 +223,26 @@ export default {
     toggleSidebar() {
       this.toggleSidebarColor("bg-white");
       this.navbarMinimize();
-    }
+    },
+    cerrarSesion() {
+
+      this.$swal.fire({
+        title: 'Espera por favor...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+      });
+      this.$swal.showLoading();
+
+      localStorage.removeItem("token")
+      localStorage.removeItem("usr_id")
+
+      setTimeout(() => {
+        this.$router.push({name:'Signin'})
+        this.$swal.close();
+      }, 2000);
+
+    },
   },
   components: {
     Breadcrumbs

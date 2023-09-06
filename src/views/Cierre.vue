@@ -147,7 +147,7 @@
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrrarDepositoMaeModalOpen()" >
+                      <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrarDepositoMaeModalOpen()" >
                         Cancelar
                       </button>
                       <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >

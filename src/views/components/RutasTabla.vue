@@ -54,10 +54,10 @@
                   <span class="text-secondary text-xs font-weight-bold">{{ ruta.realizada.rut_kgs }}</span>
                 </td>
                 <td class="align-middle">
-                  <button class="btn btn-success btn-sm" data-toggle="tooltip" v-on:click="verRuta(ruta.rut_id)">
+                  <button class="btn btn-info btn-sm" data-toggle="tooltip" v-on:click="verRuta(ruta.rut_id)">
                     Ver
                   </button>
-                  <button type="button" title="Cierre" class="btn btn-success btn-sm" @click.prevent="irCierre(ruta.rut_id)" >
+                  <button type="button" title="Cierre" class="btn btn-primary btn-sm" @click.prevent="irCierre(ruta.rut_id)" >
                     Cierre
                   </button>
                 </td>

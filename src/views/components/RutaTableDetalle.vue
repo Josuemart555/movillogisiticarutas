@@ -402,12 +402,12 @@
           .then( data => {
               if (data.data.exito) {
                 this.productosDetalleRutaLts = data.data.detalle;
-                this.$swal.fire({
-                  icon: "info",
-                  title: "Detalle Obtenido",
-                  text: false,
-                  timer: false
-                });
+                // this.$swal.fire({
+                //   icon: "info",
+                //   title: "Detalle Obtenido",
+                //   text: false,
+                //   timer: false
+                // });
               } else {
                 this.productosDetalleRutaLts = [];
               }
