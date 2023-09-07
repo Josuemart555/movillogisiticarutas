@@ -77,7 +77,10 @@
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">DOC {{ detalleRuta ? detalleRuta.rut_doc_id : '' }} Total Documento: $ {{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</h5>
+              <div class="row">
+              <h5 class="modal-title col-12">DOC {{ detalleRuta ? detalleRuta.rut_doc_id : '' }} </h5>
+              <h5 class="modal-title col-12">Total Documento: $ {{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</h5>
+              </div>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -326,19 +329,26 @@
         }
     },
     mounted: function () {
+
+      this.getDetalleRutas();
+        this.getParametros();
+
+    },
+    methods: {
+      getDetalleRutas() {
         let bodyFormData = new FormData();
         bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
         bodyFormData.append("api_key", localStorage.getItem("token"));
 
         let rut_id = null;
         if (this.$route.params.id) {
-            rut_id = this.$route.params.id;
+          rut_id = this.$route.params.id;
         }
         bodyFormData.append("rut_id", rut_id);
-        
+
         axios.post('http://localhost/app-9/api/rutas/detalleRuta', bodyFormData)
-        .then( data => {
-            if (data.data.exito) {
+            .then( data => {
+              if (data.data.exito) {
                 this.detallesRutas = data.data.docs;
                 this.$swal.fire({
                   icon: "info",
@@ -346,10 +356,10 @@
                   text: false,
                   timer: false
                 });
-            } else {
+              } else {
                 this.detallesRutas = [];
-            }
-        }).catch( err => {
+              }
+            }).catch( err => {
           this.$swal.fire({
             icon: "error",
             title: "Error al obtener ruta detalles",
@@ -357,10 +367,7 @@
             timer: false
           });
         });;
-        this.getParametros();
-
-    },
-    methods: {
+      },
       openModal (item) {
             $("#modalDetalleRuta").modal('show');
             this.getDetalleRuta(item);
@@ -658,6 +665,8 @@
                   timer: 1500
                 });
                 setTimeout( function () {
+                  this.detallesRutas = [];
+                  this.getDetalleRutas();
                   this.closeModal();
                 }, 500);
               }
@@ -668,7 +677,10 @@
 
         },
         claseBotonRutaDetalle(item) {
-          if (item.rut_est_id == 2) {
+          if (item.rut_est_id == 1) {
+            // pendiente
+            return 'btn btn-info btn-sm';
+          } else if (item.rut_est_id == 2) {
             // entregado
             return 'btn btn-success btn-sm';
           } else if (item.rut_est_id == 3) {
@@ -677,6 +689,9 @@
           } else if (item.rut_est_id == 4) {
             // parcial
             return 'btn btn-warning btn-sm';
+          } else if (item.rut_est_id == 5) {
+            // en ruta
+            return 'btn btn-primary btn-sm';
           }
           return 'btn btn-success btn-sm';
         },
