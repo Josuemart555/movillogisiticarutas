@@ -29,63 +29,63 @@
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]" v-model="efectivo['20000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo["20000"] * 20000 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo["20000"] * 20000) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">10.000</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['10000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['10000'] * 10000 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['10000'] * 10000) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">5.000</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['5000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['5000'] * 5000 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['5000'] * 5000) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">2.000</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['2000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['2000'] * 2000 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['2000'] * 2000) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">1.000</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['1000']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['1000'] * 1000 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['1000'] * 1000) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">500</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['500']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['500'] * 500 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['500'] * 500) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">100</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['100']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['100'] * 100 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['100'] * 100) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">50</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['50']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['50'] * 50 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['50'] * 50) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end">10</th>
                   <td>
                     <input type="number" class="form-control" min="1" pattern="^[0-9]+" v-model="efectivo['10']" @keypress="noPermitirIngresoNumeroNegativo($event)" >
                   </td>
-                  <td class="text-end">{{ efectivo['10'] * 10 }}</td>
+                  <td class="text-end">{{ formatearMoneda(efectivo['10'] * 10) }}</td>
                 </tr>
                 <tr>
                   <th scope="row" class="text-end"></th>
@@ -93,7 +93,7 @@
                     Total
                   </td>
                   <td class="text-end">
-                    {{efectivo["20000"] * 20000
+                    {{ formatearMoneda(efectivo["20000"] * 20000
                      +  efectivo['10000'] * 10000 
                     + efectivo['5000'] * 5000 
                   + efectivo['2000'] * 2000 
@@ -101,7 +101,7 @@
               + efectivo['500'] * 500
             + efectivo['100'] * 100 
           + efectivo['50'] * 50 
-        + efectivo['10'] * 10}}
+        + efectivo['10'] * 10)}}
                   </td>
                 </tr>
                 </tbody>
@@ -196,7 +196,7 @@
                       <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
                     </td>
                     <td class="has-success">
-                      <input type="number" class="form-control" v-model="depositoMae.mon" :disabled="true" >
+                      <input type="text" class="form-control" v-model="depositoMae.mon" :disabled="true" >
                     </td>
                     <td style="display: inline-flex">
                       <button class="btn btn-danger btn-sm" title="Eliminar deposito" type="button" @click.prevent="eliminarDepositoMae(depositoMae)" >
@@ -209,7 +209,7 @@
                       Total
                     </td>
                     <td class="has-success">
-                      <span v-text="sumaDeopsitos"></span>
+                      <span v-text="formatearMoneda(sumaDeopsitos)"></span>
                     </td>
                   </tr>
                 </tbody>
@@ -304,7 +304,7 @@
                         <input type="text" class="form-control" v-model="cierreTransBank.fec" :disabled="true" >
                       </td>
                       <td class="has-success">
-                        <input type="number" class="form-control" v-model="cierreTransBank.mon" :disabled="true" >
+                        <input type="text" class="form-control" v-model="cierreTransBank.mon" :disabled="true" >
                       </td>
                       <td style="display: inline-flex">
                         <button class="btn btn-danger btn-sm" title="Eliminar cierre" type="button" @click.prevent="eliminarCierreTransBank(cierreTransBank)" >
@@ -317,7 +317,7 @@
                         Total
                       </td>
                       <td class="has-success">
-                        <span v-text="sumaCierre"></span>
+                        <span v-text="formatearMoneda(sumaCierre)"></span>
                       </td>
                     </tr>
                   </tbody>
@@ -661,7 +661,7 @@ export default {
                 const element = data.data.mae[index];
                 let mae = {
                   num: element.mae_num,
-                  mon: element.mae_mon,
+                  mon: this.formatearMoneda(element.mae_mon),
                   fec: element.mae_fec
                 };
                 this.depositosMaeLts.push(mae);                
@@ -670,9 +670,10 @@ export default {
               for (let index = 0; index < data.data.tb.length; index++) {
                 const element = data.data.tb[index];
                 console.log(element);
+                console.log(this.formatearMoneda(element.tb_mon));
                 let tb = {
                   cod: element.tb_cod,
-                  mon: element.tb_mon,
+                  mon: this.formatearMoneda(element.tb_mon),
                   fec: element.tb_fec
                 }
                 this.cierresTransBankLts.push(tb);
@@ -771,6 +772,9 @@ export default {
       // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
       // window.location.href = 'http://localhost:8080/ruta/cierre/'+rut_id;
 
+    },
+    formatearMoneda(valor) {
+      return new Intl.NumberFormat('en-US').format(valor);
     }
   },
   computed: {
@@ -778,7 +782,7 @@ export default {
       let suma = 0;
       for (let i = 0; i < this.cierresTransBankLts.length; i++) {
         const obj = this.cierresTransBankLts[i];
-        suma += obj.mon;
+        suma += parseFloat( obj.mon.replace(',', '') );
       }
       return suma;
     },
@@ -787,10 +791,10 @@ export default {
       for (let i = 0; i < this.depositosMaeLts.length; i++) {
         const obj = this.depositosMaeLts[i];
         console.log(obj);
-        suma += obj.mon;
+        suma += parseFloat( obj.mon.replace(',', '') );
       }
       return suma;
-    },
+    }
   }
 }
 </script>

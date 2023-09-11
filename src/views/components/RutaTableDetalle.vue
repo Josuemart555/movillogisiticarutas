@@ -79,7 +79,7 @@
             <div class="modal-header">
               <div class="row">
               <h5 class="modal-title col-12">DOC {{ detalleRuta ? detalleRuta.rut_doc_id : '' }} </h5>
-              <h5 class="modal-title col-12">Total Documento: $ {{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</h5>
+              <h5 class="modal-title col-12">Total Documento: $ {{ detalleRuta ? formatearMoneda(detalleRuta.rut_mon_doc) : '' }}</h5>
               </div>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -252,11 +252,11 @@
               </div>
 
               <div class="form-group alert alert-info" id="opc-desc" v-show="mostrarDescuento">
-                Total a cobrar: $ <span id="total-cobrar">0</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
+                Total a cobrar: $ <span id="total-cobrar">{{formatearMoneda(0)}}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
               </div>
 
               <div class="form-group alert alert-info">
-                Total a cobrar: $ <span id="total-cobrar">{{ detalleRuta ? detalleRuta.rut_mon_doc : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
+                Total a cobrar: $ <span id="total-cobrar">{{ detalleRuta ? formatearMoneda(detalleRuta.rut_mon_doc) : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
               </div>
 
               <div class="form-group">
@@ -369,9 +369,14 @@
         });;
       },
       openModal (item) {
+
+        this.getDetalleRuta(item);
+
+          setTimeout(() => {
             $("#modalDetalleRuta").modal('show');
-            this.getDetalleRuta(item);
-            this.detalleRuta = Object.assign({}, item);
+            this.detalleRuta = Object.assign({}, item);            
+          }, 300);
+
         },
         closeModal () {
             $("#modalDetalleRuta").modal('hide');
@@ -664,11 +669,9 @@
                   showConfirmButton: false,
                   timer: 1500
                 });
-                setTimeout( function () {
-                  this.detallesRutas = [];
-                  this.getDetalleRutas();
-                  this.closeModal();
-                }, 500);
+                this.detallesRutas = [];
+                this.getDetalleRutas();
+                this.closeModal();
               }
           }).catch( err => {
             console.error(err)
@@ -695,6 +698,9 @@
           }
           return 'btn btn-success btn-sm';
         },
+        formatearMoneda(valor) {
+          return new Intl.NumberFormat('en-US').format(valor);
+        }
     },
     computed: {
       
