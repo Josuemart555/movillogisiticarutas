@@ -54,13 +54,13 @@
                   <span class="text-secondary text-xs font-weight-bold">{{ detalle.rut_doc_id }}</span>
                 </td>
                 <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold">${{ detalle.rut_mon_doc }}</span>
+                  <span class="text-secondary text-xs font-weight-bold">{{ formatearMoneda(detalle.rut_mon_doc) }}</span>
                 </td>
                 <td class="align-middle text-center">
                   <span class="text-secondary text-xs font-weight-bold">{{ detalle.estado.est_nom }}</span>
                 </td>
                 <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold">${{ detalle.rut_mon_pag }}</span>
+                  <span class="text-secondary text-xs font-weight-bold">{{ formatearMoneda(detalle.rut_mon_pag) }}</span>
                 </td>
                 <td class="align-middle">
                   <button type="button" v-bind:class="claseBotonRutaDetalle(detalle)" @click.prevent="openModal(detalle)" >
@@ -79,7 +79,7 @@
             <div class="modal-header">
               <div class="row">
               <h5 class="modal-title col-12">DOC {{ detalleRuta ? detalleRuta.rut_doc_id : '' }} </h5>
-              <h5 class="modal-title col-12">Total Documento: $ {{ detalleRuta ? formatearMoneda(detalleRuta.rut_mon_doc) : '' }}</h5>
+              <h5 class="modal-title col-12">Total Documento: {{ detalleRuta ? formatearMoneda(detalleRuta.rut_mon_doc) : '' }}</h5>
               </div>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -148,7 +148,7 @@
                         </td>
                         <td class="has-success">
                           <!--onchange="validarInput(this)"-->
-                          <input type="number" name="monto-pago" :value="pago.monto" class="form-control" :disabled="true" >
+                          <input type="text" name="monto-pago" :value="formatearMoneda(pago.monto)" class="form-control" :disabled="true" >
                         </td>
                         <td style="display: inline-flex">
                           <button class="btn btn-danger btn-sm" title="Eliminar pago" @click.prevent="eliminarPagoDetalle(pago)" >
@@ -252,11 +252,11 @@
               </div>
 
               <div class="form-group alert alert-info" id="opc-desc" v-show="mostrarDescuento">
-                Total a cobrar: $ <span id="total-cobrar">{{formatearMoneda(0)}}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
+                Total a cobrar: <span id="total-cobrar">{{formatearMoneda(0)}}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
               </div>
 
               <div class="form-group alert alert-info">
-                Total a cobrar: $ <span id="total-cobrar">{{ detalleRuta ? formatearMoneda(detalleRuta.rut_mon_doc) : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
+                Total a cobrar: <span id="total-cobrar">{{ detalleRuta ? formatearMoneda(detalleRuta.rut_mon_doc) : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
               </div>
 
               <div class="form-group">
@@ -371,7 +371,7 @@
       openModal (item) {
 
         this.getDetalleRuta(item);
-
+        this.itemRuta.est_id = item.rut_est_id;
           setTimeout(() => {
             $("#modalDetalleRuta").modal('show');
             this.detalleRuta = Object.assign({}, item);            
@@ -382,6 +382,9 @@
             $("#modalDetalleRuta").modal('hide');
             setTimeout(() => {
                 this.detalleRuta = Object.assign({});
+                this.pagosDetalleLts = [];
+                this.productosDevueltosLts = [];
+                this.itemRuta.est_id = 0;
             }, 300)
         },
         getParametros() {
@@ -699,7 +702,7 @@
           return 'btn btn-success btn-sm';
         },
         formatearMoneda(valor) {
-          return new Intl.NumberFormat('en-US').format(valor);
+          return new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(valor);
         }
     },
     computed: {

@@ -196,7 +196,7 @@
                       <input type="text" class="form-control" v-model="depositoMae.fec" :disabled="true" >
                     </td>
                     <td class="has-success">
-                      <input type="text" class="form-control" v-model="depositoMae.mon" :disabled="true" >
+                      <input type="text" class="form-control" :value="formatearMoneda(depositoMae.mon)" :disabled="true" >
                     </td>
                     <td style="display: inline-flex">
                       <button class="btn btn-danger btn-sm" title="Eliminar deposito" type="button" @click.prevent="eliminarDepositoMae(depositoMae)" >
@@ -304,7 +304,7 @@
                         <input type="text" class="form-control" v-model="cierreTransBank.fec" :disabled="true" >
                       </td>
                       <td class="has-success">
-                        <input type="text" class="form-control" v-model="cierreTransBank.mon" :disabled="true" >
+                        <input type="text" class="form-control" :value="formatearMoneda(cierreTransBank.mon)" :disabled="true" >
                       </td>
                       <td style="display: inline-flex">
                         <button class="btn btn-danger btn-sm" title="Eliminar cierre" type="button" @click.prevent="eliminarCierreTransBank(cierreTransBank)" >
@@ -774,7 +774,7 @@ export default {
 
     },
     formatearMoneda(valor) {
-      return new Intl.NumberFormat('en-US').format(valor);
+      return new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(valor);
     }
   },
   computed: {
@@ -782,7 +782,7 @@ export default {
       let suma = 0;
       for (let i = 0; i < this.cierresTransBankLts.length; i++) {
         const obj = this.cierresTransBankLts[i];
-        suma += parseFloat( obj.mon.replace(',', '') );
+        suma += obj.mon;
       }
       return suma;
     },
@@ -791,7 +791,7 @@ export default {
       for (let i = 0; i < this.depositosMaeLts.length; i++) {
         const obj = this.depositosMaeLts[i];
         console.log(obj);
-        suma += parseFloat( obj.mon.replace(',', '') );
+        suma += obj.mon;
       }
       return suma;
     }
