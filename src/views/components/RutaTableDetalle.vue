@@ -251,12 +251,8 @@
                 </div>
               </div>
 
-              <div class="form-group alert alert-info" id="opc-desc" v-show="mostrarDescuento">
-                Total a cobrar: <span id="total-cobrar">{{formatearMoneda(0)}}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
-              </div>
-
               <div class="form-group alert alert-info">
-                Total a cobrar: <span id="total-cobrar">{{ detalleRuta ? formatearMoneda(detalleRuta.rut_mon_doc) : '' }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
+                Total a cobrar: <span id="total-cobrar">{{ formatearMoneda(montoMostrarMensaje) }}</span> <small><i class="fas fa-exclamation-circle"></i> NO están considerados los PLANES</small>
               </div>
 
               <div class="form-group">
@@ -332,7 +328,11 @@
 
       this.getDetalleRutas();
         this.getParametros();
+        this.montoMostrarMensaje;
 
+    },
+    created() {
+      this.montoMostrarMensaje;
     },
     methods: {
       getDetalleRutas() {
@@ -706,7 +706,22 @@
         }
     },
     computed: {
-      
+      montoMostrarMensaje() {
+        if (this.detalleRuta && this.itemRuta) {
+          if (this.itemRuta.est_id == 3) {
+            return 0;
+          } else if (this.itemRuta.est_id == 4) {
+            let totalDevolucion = 0;
+            for (let i = 0; i < this.productosDevueltosLts.length; i++) {
+              const dev = this.productosDevueltosLts[i];
+              totalDevolucion =+ (dev.cant * dev.val);
+            }
+            return (this.detalleRuta.rut_mon_doc - totalDevolucion);
+          }
+          return this.detalleRuta.rut_mon_doc;
+        }
+        return 0;
+      }
     },
   };
   </script>
