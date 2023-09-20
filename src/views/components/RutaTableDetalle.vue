@@ -54,9 +54,10 @@
                   <span class="text-secondary text-xs font-weight-bold">{{ formatearMoneda(detalle.rut_mon_pag) }}</span>
                 </td>
                 <td class="align-middle">
-                  <button type="button" v-bind:class="claseBotonRutaDetalle(detalle)" @click.prevent="openModal(detalle)" >
-                    <i class="fas fa-check"></i>
-                  </button>
+                  <!--<button type="button" v-bind:class="claseBotonRutaDetalle(detalle)" @click.prevent="openModal(detalle)" >-->
+                  <!--  <i class="fas fa-check"></i>-->
+                  <!--</button>-->
+                  <modal :detalle="detalle" :key="detalle.id"></modal>
                 </td>
               </tr>
             </tbody>
@@ -64,14 +65,12 @@
         </div>
       </div>
 
-      <modal></modal>
-
     </div>
   </template>
   
   <script>
   import axios from 'axios';
-  import $ from 'jquery';
+
   import modal from "@/views/components/RutalDetalleModal";
 
   export default {
@@ -130,65 +129,6 @@
             timer: false
           });
         });;
-      },
-      openModal (item) {
-
-        this.getDetalleRuta(item);
-        this.itemRuta.est_id = item.rut_est_id;
-          setTimeout(() => {
-            $("#modalDetalleRuta").modal('show');
-            this.detalleRuta = Object.assign({}, item);
-          }, 300);
-
-      },
-      getDetalleRuta(detalleRuta) {
-        this.detalleRutaDoc = detalleRuta;
-        let bodyFormData = new FormData();
-        bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
-        bodyFormData.append("api_key", localStorage.getItem("token"));
-        bodyFormData.append("rut_doc_id", detalleRuta.rut_det_id);
-        bodyFormData.append("rut_doc_tip", detalleRuta.rut_doc_tip);
-
-        axios.post('http://localhost/app-9/api/rutas/detalleDoc', bodyFormData)
-        .then( data => {
-            if (data.data.exito) {
-              this.productosDetalleRutaLts = data.data.detalle;
-              // this.$swal.fire({
-              //   icon: "info",
-              //   title: "Detalle Obtenido",
-              //   text: false,
-              //   timer: false
-              // });
-            } else {
-              this.productosDetalleRutaLts = [];
-            }
-        }).catch( err => {
-          this.$swal.fire({
-            icon: "error",
-            title: "Error al obtener detalle",
-            text: err,
-            timer: false
-          });
-        });;
-      },
-      claseBotonRutaDetalle(item) {
-        if (item.rut_est_id == 1) {
-          // pendiente
-          return 'btn btn-info btn-sm';
-        } else if (item.rut_est_id == 2) {
-          // entregado
-          return 'btn btn-success btn-sm';
-        } else if (item.rut_est_id == 3) {
-          // devuelto
-          return 'btn btn-danger btn-sm';
-        } else if (item.rut_est_id == 4) {
-          // parcial
-          return 'btn btn-warning btn-sm';
-        } else if (item.rut_est_id == 5) {
-          // en ruta
-          return 'btn btn-primary btn-sm';
-        }
-        return 'btn btn-success btn-sm';
       },
       formatearMoneda(valor) {
         return new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(valor);

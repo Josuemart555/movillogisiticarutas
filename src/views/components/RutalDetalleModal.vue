@@ -1,5 +1,9 @@
 <template>
   <div>
+    <button type="button" v-bind:class="claseBotonRutaDetalle(detalle)" @click.prevent="openModal(detalle)" >
+      <i class="fas fa-check"></i>
+    </button>
+
     <div class="modal fade" id="modalDetalleRuta" tabindex="-1" aria-labelledby="modalDetalleRuta" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -203,6 +207,9 @@ import axios from "axios";
 
 export default {
   name: "ruta-detalle-modal",
+  props: {
+    detalle: null,
+  },
   mounted() {
     this.getParametros();
   },
@@ -260,6 +267,14 @@ export default {
       bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
       bodyFormData.append("api_key", localStorage.getItem("token"));
 
+      this.$swal.fire({
+        title: 'Espera por favor...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+      });
+      this.$swal.showLoading();
+
       axios.post('http://localhost/app-9/api/rutas/parametros', bodyFormData)
           .then( data => {
             if (data.data.exito) {
@@ -270,8 +285,55 @@ export default {
               this.estados = [];
               this.motivos = [];
               this.pagos = [];
+              this.$swal.fire({
+                icon: "error",
+                title: "Error al obtener parametros",
+                text: false,
+                timer: false
+              });
             }
+            this.$swal.close();
           });
+    },
+    async getDetalleRuta(detalleRuta) {
+      this.detalleRutaDoc = detalleRuta;
+      let bodyFormData = new FormData();
+      bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
+      bodyFormData.append("api_key", localStorage.getItem("token"));
+      bodyFormData.append("rut_doc_id", detalleRuta.rut_det_id);
+      bodyFormData.append("rut_doc_tip", detalleRuta.rut_doc_tip);
+
+      axios.post('http://localhost/app-9/api/rutas/detalleDoc', bodyFormData)
+      .then( data => {
+        if (data.data.exito) {
+          this.productosDetalleRutaLts = data.data.detalle;
+        } else {
+          this.$swal.fire({
+            icon: "error",
+            title: "Error al obtener detalle",
+            text: false,
+            timer: false
+          });
+          this.productosDetalleRutaLts = [];
+        }
+      }).catch( err => {
+        this.$swal.fire({
+          icon: "error",
+          title: "Error al obtener detalle",
+          text: err,
+          timer: false
+        });
+      });
+    },
+    openModal(item) {
+
+      this.getDetalleRuta(item);
+      this.itemRuta.est_id = item.rut_est_id;
+      setTimeout(() => {
+        $("#modalDetalleRuta").modal('show');
+        this.detalleRuta = Object.assign({}, item);
+      }, 400);
+
     },
     closeModal () {
       $("#modalDetalleRuta").modal('hide');
@@ -531,6 +593,25 @@ export default {
         this.$swal.close();
       });
 
+    },
+    claseBotonRutaDetalle(item) {
+      if (item.rut_est_id == 1) {
+        // pendiente
+        return 'btn btn-info btn-sm';
+      } else if (item.rut_est_id == 2) {
+        // entregado
+        return 'btn btn-success btn-sm';
+      } else if (item.rut_est_id == 3) {
+        // devuelto
+        return 'btn btn-danger btn-sm';
+      } else if (item.rut_est_id == 4) {
+        // parcial
+        return 'btn btn-warning btn-sm';
+      } else if (item.rut_est_id == 5) {
+        // en ruta
+        return 'btn btn-primary btn-sm';
+      }
+      return 'btn btn-success btn-sm';
     },
   },
   computed: {
