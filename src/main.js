@@ -8,7 +8,6 @@ import ArgonDashboard from "./argon-dashboard";
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import moment from 'moment';
-// import VueMoment from 'vue-moment';
 import jQuery from 'jquery';
 global.jQuery = jQuery;
 global.$ = jQuery;
@@ -16,6 +15,8 @@ import VueSweetalert2 from 'vue-sweetalert2';
 
 // If you don't need the styles, do not connect
 import 'sweetalert2/dist/sweetalert2.min.css';
+
+import 'bootstrap/dist/js/bootstrap.min';
 
 const appInstance = createApp(App);
 appInstance.use(store);
