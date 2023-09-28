@@ -93,7 +93,16 @@
 
             <div class="row hidden" id="opc-pago" name="opc-pago" v-show="mostrarPagos">
               <div class="col-sm-12">
-                <h4>Pagos </h4>
+                <div class="col-12 row">
+                  <div class="col-8">
+                    <h4>Pagos </h4>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
                 <table class="table table-condensed">
                   <thead>
                   <tr>
@@ -121,9 +130,6 @@
                       <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
                       <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
                         <i class="fas fa-camera"></i>
-                      </button>
-                      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
-                        <i class="fas fa-plus"></i>
                       </button>
                     </td>
                   </tr>
@@ -163,7 +169,16 @@
             </div>
 
             <div class="form-group hidden" id="opc-prods" v-show="mostrarProductosDev">
-              <h4>Productos devueltos </h4>
+              <div class="col-12 row">
+                <div class="col-8">
+                  <h4>Productos devueltos </h4>
+                </div>
+                <div class="col-4">
+                  <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarProductoDevolucion()" >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
               <table class="table table-condensed">
                 <thead>
                 <tr>
@@ -175,21 +190,14 @@
                 <tbody id="opc-dev-body">
                 <tr id="linea-dev-" name="linea-dev">
                   <td class="has-success">
-                    <!-- onchange="validarSinRepetir(this)" -->
                     <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" >
                       <option value="">-- Seleccionar --</option>
                       <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
                     </select>
                   </td>
                   <td class="has-success">
-                    <!-- onchange="validarInput(this)" -->
                     <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
                     <input type="hidden" name="val-dev" id="val-dev" value="">
-                  </td>
-                  <td style="display: inline-flex">
-                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarProductoDevolucion()" >
-                      <i class="fas fa-plus"></i>
-                    </button>
                   </td>
                 </tr>
                 </tbody>
