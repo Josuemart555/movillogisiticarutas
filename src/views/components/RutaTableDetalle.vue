@@ -674,11 +674,27 @@ export default {
               });
               this.detallesRutas = [];
               this.getDetalleRutas();
-              this.closeModal();
+            } else {
+              this.detallesRutas = [];
+              this.getDetalleRutas();
+              this.$swal.close();
+              this.$swal.fire({
+                icon: "error",
+                title: "Error al guardar",
+                text: false,
+                timer: false
+              });
             }
+            this.closeModal();
           }).catch( err => {
         console.error(err)
         this.$swal.close();
+              this.$swal.fire({
+                icon: "error",
+                title: "Error al guardar",
+                text: false,
+                timer: false
+              });
       });
 
     },
