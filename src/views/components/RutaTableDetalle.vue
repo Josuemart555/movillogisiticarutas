@@ -93,7 +93,16 @@
 
             <div class="row hidden" id="opc-pago" name="opc-pago" v-show="mostrarPagos">
               <div class="col-sm-12">
-                <h4>Pagos </h4>
+                <div class="col-12 row">
+                  <div class="col-8">
+                    <h4>Pagos </h4>
+                  </div>
+                  <div class="col-4">
+                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
                 <table class="table table-condensed">
                   <thead>
                   <tr>
@@ -121,9 +130,6 @@
                       <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
                       <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
                         <i class="fas fa-camera"></i>
-                      </button>
-                      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
-                        <i class="fas fa-plus"></i>
                       </button>
                     </td>
                   </tr>
@@ -163,7 +169,16 @@
             </div>
 
             <div class="form-group hidden" id="opc-prods" v-show="mostrarProductosDev">
-              <h4>Productos devueltos </h4>
+              <div class="col-12 row">
+                <div class="col-8">
+                  <h4>Productos devueltos </h4>
+                </div>
+                <div class="col-4">
+                  <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarProductoDevolucion()" >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
               <table class="table table-condensed">
                 <thead>
                 <tr>
@@ -175,21 +190,14 @@
                 <tbody id="opc-dev-body">
                 <tr id="linea-dev-" name="linea-dev">
                   <td class="has-success">
-                    <!-- onchange="validarSinRepetir(this)" -->
                     <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" >
                       <option value="">-- Seleccionar --</option>
                       <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
                     </select>
                   </td>
                   <td class="has-success">
-                    <!-- onchange="validarInput(this)" -->
                     <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
                     <input type="hidden" name="val-dev" id="val-dev" value="">
-                  </td>
-                  <td style="display: inline-flex">
-                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarProductoDevolucion()" >
-                      <i class="fas fa-plus"></i>
-                    </button>
                   </td>
                 </tr>
                 </tbody>
@@ -340,6 +348,14 @@ export default {
       bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
       bodyFormData.append("api_key", localStorage.getItem("token"));
 
+      this.$swal.fire({
+        title: 'Espera por favor...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+      });
+      this.$swal.showLoading();
+
       let rut_id = null;
       if (this.$route.params.id) {
         rut_id = this.$route.params.id;
@@ -358,7 +374,14 @@ export default {
               });
             } else {
               this.detallesRutas = [];
+              this.$swal.fire({
+                icon: "error",
+                title: "Error al obtener ruta detalles",
+                text: false,
+                timer: false
+              });
             }
+            this.$swal.close();
           }).catch( err => {
         this.$swal.fire({
           icon: "error",
@@ -392,6 +415,14 @@ export default {
       bodyFormData.append("usr_id", localStorage.getItem("usr_id"));
       bodyFormData.append("api_key", localStorage.getItem("token"));
 
+      this.$swal.fire({
+        title: 'Espera por favor...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+      });
+      this.$swal.showLoading();
+
       axios.post('http://localhost/app-9/api/rutas/parametros', bodyFormData)
           .then( data => {
             if (data.data.exito) {
@@ -402,7 +433,14 @@ export default {
               this.estados = [];
               this.motivos = [];
               this.pagos = [];
+              this.$swal.fire({
+                icon: "error",
+                title: "Error al obtener parametros",
+                text: false,
+                timer: false
+              });
             }
+            this.$swal.close();
           });
     },
     getDetalleRuta(detalleRuta) {
@@ -413,19 +451,28 @@ export default {
       bodyFormData.append("rut_doc_id", detalleRuta.rut_det_id);
       bodyFormData.append("rut_doc_tip", detalleRuta.rut_doc_tip);
 
+      this.$swal.fire({
+        title: 'Espera por favor...',
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        timerProgressBar: true,
+      });
+      this.$swal.showLoading();
+
       axios.post('http://localhost/app-9/api/rutas/detalleDoc', bodyFormData)
           .then( data => {
             if (data.data.exito) {
               this.productosDetalleRutaLts = data.data.detalle;
-              // this.$swal.fire({
-              //   icon: "info",
-              //   title: "Detalle Obtenido",
-              //   text: false,
-              //   timer: false
-              // });
             } else {
               this.productosDetalleRutaLts = [];
+              this.$swal.fire({
+                icon: "error",
+                title: "Error al obtener detalle",
+                text: false,
+                timer: false
+              });
             }
+            this.$swal.close();
           }).catch( err => {
         this.$swal.fire({
           icon: "error",
@@ -433,7 +480,7 @@ export default {
           text: err,
           timer: false
         });
-      });;
+      });
     },
     onChangeSelectEstado(event) {
       var valueSelect = event.target.value;
@@ -672,29 +719,13 @@ export default {
                 showConfirmButton: false,
                 timer: 1500
               });
+              this.closeModal();
               this.detallesRutas = [];
               this.getDetalleRutas();
-            } else {
-              this.detallesRutas = [];
-              this.getDetalleRutas();
-              this.$swal.close();
-              this.$swal.fire({
-                icon: "error",
-                title: "Error al guardar",
-                text: false,
-                timer: false
-              });
             }
-            this.closeModal();
           }).catch( err => {
         console.error(err)
         this.$swal.close();
-              this.$swal.fire({
-                icon: "error",
-                title: "Error al guardar",
-                text: false,
-                timer: false
-              });
       });
 
     },
