@@ -119,7 +119,7 @@
 
             localStorage.setItem('fechaInputRutas', this.fechaInput);
            
-            axios.post('http://localhost/app-9/api/rutas/getRutasPorUsuario', bodyFormData)
+            axios.post(process.env.VUE_APP_API_URL+'rutas/getRutasPorUsuario', bodyFormData)
             .then( data => {
                 console.log(data);
                 if (data.data.exito && data.data.rutas.length > 0) {

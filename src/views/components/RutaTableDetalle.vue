@@ -362,10 +362,37 @@ export default {
       }
       bodyFormData.append("rut_id", rut_id);
 
-      axios.post('http://localhost/app-9/api/rutas/detalleRuta', bodyFormData)
+      axios.post(process.env.VUE_APP_API_URL+'rutas/detalleRuta', bodyFormData)
           .then( data => {
             if (data.data.exito) {
               this.detallesRutas = data.data.docs;
+              for (let index = 0; index < this.detallesRutas.length; index++) {
+                const element = this.detallesRutas[index];
+
+                let bodyFormData2 = new FormData();
+                bodyFormData2.append("usr_id", localStorage.getItem("usr_id"));
+                bodyFormData2.append("api_key", localStorage.getItem("token"));
+                bodyFormData2.append("id", element.rut_det_id);
+                axios.post(process.env.VUE_APP_API_URL+'rutas/getPagos', bodyFormData2)
+                .then( data => {
+                  if (data.data.exito) {
+                    element.pagos = data.data.pagos;
+                    var suma = 0;
+                    for (const pago of element.pagos) {
+                      suma += pago.pag_mon;
+                    }
+                    element.rut_mon_pag = suma;
+                  } else {
+                    this.$swal.fire({
+                      icon: "error",
+                      title: "Error al obtener pagos",
+                      text: false,
+                      timer: false
+                    });
+                    element.pagos = [];
+                  }
+                });
+              }
               this.$swal.fire({
                 icon: "info",
                 title: "Ruta Detalles Obtenidas",
@@ -389,7 +416,7 @@ export default {
           text: err,
           timer: false
         });
-      });;
+      });
     },
     openModal (item) {
 
@@ -423,7 +450,7 @@ export default {
       });
       this.$swal.showLoading();
 
-      axios.post('http://localhost/app-9/api/rutas/parametros', bodyFormData)
+      axios.post(process.env.VUE_APP_API_URL+'rutas/parametros', bodyFormData)
           .then( data => {
             if (data.data.exito) {
               this.estados = data.data.estados;
@@ -459,7 +486,7 @@ export default {
       });
       this.$swal.showLoading();
 
-      axios.post('http://localhost/app-9/api/rutas/detalleDoc', bodyFormData)
+      axios.post(process.env.VUE_APP_API_URL+'rutas/detalleDoc', bodyFormData)
           .then( data => {
             if (data.data.exito) {
               this.productosDetalleRutaLts = data.data.detalle;
@@ -620,22 +647,20 @@ export default {
 
     },
     ingresoValoresProDev() {
-      console.log('entro metodo = ', this.productoDevItem);
+      
       if (this.productoDevItem) {
-        console.log('entro if item');
+        
         const obj = this.productosDetalleRutaLts.find((obj) => obj.KOPRCT === this.productoDevItem.prod);
-        console.log('obj = ', obj);
+      
         if (obj) {
-          console.log('entro if obj');
-
+      
           this.productoDevItem.lin = obj.NULIDO;
 
           this.productoDevItem.val = parseInt(obj.PPPRBR) * this.productoDevItem.cant;
-          console.log('this.productoDevItem modificado = ', this.productoDevItem);
+      
         }
 
       } else {
-        console.log('entra else');
         this.productoDevItem = Object.assign({}, this.productoDevDefault);
       }
     },
@@ -707,10 +732,9 @@ export default {
         bodyFormData.append(`devs[${i}][lin]` , dev.lin );
       }
 
-      axios.post('http://localhost/app-9/api/rutas/cambioEstadoDelPedido', bodyFormData)
+      axios.post(process.env.VUE_APP_API_URL+'rutas/cambioEstadoDelPedido', bodyFormData)
           .then( data => {
             if (data.data.exito) {
-              console.log(data);
               this.$swal.close();
               this.$swal.fire({
                 position: 'top-end',

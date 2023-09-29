@@ -643,7 +643,7 @@ export default {
       }
       bodyFormData.append("rut_id", rut_id);
 
-      axios.post('http://localhost/app-9/api/rutas/getCierre', bodyFormData)
+      axios.post(process.env.VUE_APP_API_URL+'rutas/getCierre', bodyFormData)
           .then( data => {
             if (data.data.exito) {
               console.log(data);
@@ -728,7 +728,7 @@ export default {
         bodyFormData.append(`tb[${i}][mon]`, dev.mon);
       }
 
-      axios.post('http://localhost/app-9/api/rutas/guardarCierre', bodyFormData)
+      axios.post(process.env.VUE_APP_API_URL+'rutas/guardarCierre', bodyFormData)
       .then( data => {
         if (data.data.exito) {
           console.log('entro if exitoso');

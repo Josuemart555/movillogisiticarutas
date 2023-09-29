@@ -135,7 +135,7 @@ export default {
       bodyFormData.append("usuario", this.usuario);
       bodyFormData.append("contrasena", this.password);
 
-      axios.post('http://localhost/app-9/api/auth/login', bodyFormData)
+      axios.post(process.env.VUE_APP_API_URL+'auth/login', bodyFormData)
       .then( data => {
         if (data.data.exito) {
 
