@@ -98,12 +98,14 @@
                     <h4>Pagos </h4>
                   </div>
                   <div class="col-4">
-                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
+                    <!--<button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >-->
+                    <button class="btn btn-primary btn-sm" type="button" @click.prevent="abrirModalAddPago()" >
                       <i class="fas fa-plus"></i>
                     </button>
                   </div>
                 </div>
-                <table class="table table-condensed">
+
+                <!--<table class="table table-condensed">
                   <thead>
                   <tr>
                     <th>Tipo pago</th>
@@ -114,19 +116,19 @@
                   <tbody id="opc-pago-body">
                   <tr id="linea-pago-" name="linea-pago" >
                     <td class="has-success">
-                      <!--@change="validarSelectPago($event)"-->
+                      &lt;!&ndash;@change="validarSelectPago($event)"&ndash;&gt;
                       <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" >
-                        <option value="">-- Seleccionar --</option>
+                        <option value="">&#45;&#45; Seleccionar &#45;&#45;</option>
                         <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" :selected="pago.tip_id === pago.tipo">{{ pago.tip_nom }}</option>
                       </select>
                     </td>
                     <td class="has-success">
-                      <!--onchange="validarInput(this)"-->
+                      &lt;!&ndash;onchange="validarInput(this)"&ndash;&gt;
                       <input type="number" name="monto-pago" v-model="pagoItem.monto" class="form-control" >
                     </td>
                     <td style="display: inline-flex">
                       <input type="hidden" name="id-pago" value="">
-                      <!--onchange="validarSoporte(this, '')"-->
+                      &lt;!&ndash;onchange="validarSoporte(this, '')"&ndash;&gt;
                       <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
                       <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
                         <i class="fas fa-camera"></i>
@@ -134,7 +136,51 @@
                     </td>
                   </tr>
                   </tbody>
-                </table>
+                </table>-->
+
+                <div class="modal fade" id="modalAgregarPago" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Agregar Pago </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="col-12 row container">
+                          <div class="col-12 ">
+                            <div class="col-md-6">
+                              <label for="example-text-input" class="form-control-label">Tipo</label>
+                              <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" >
+                                <option value="">-- Seleccionar --</option>
+                                <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" :selected="pago.tip_id === pago.tipo">{{ pago.tip_nom }}</option>
+                              </select>
+                            </div>
+                            <div class="col-md-6">
+                              <label for="example-text-input" class="form-control-label">Monto</label>
+                              <input type="number" name="monto-pago" v-model="pagoItem.monto" class="form-control" >
+                            </div>
+                            <div class="col-md-6">
+
+                              <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
+                              <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
+                                <i class="fas fa-camera"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrarModalAddPago()" >
+                          Cancelar
+                        </button>
+                        <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
+                          Guardar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <table class="table table-condensed">
                   <thead>
                   <tr>
@@ -422,6 +468,7 @@ export default {
 
       this.getDetalleRuta(item);
       this.itemRuta.est_id = item.rut_est_id;
+      this.onChangeSelectEstado2(item.rut_est_id);
       setTimeout(() => {
         $("#modalDetalleRuta").modal('show');
         this.detalleRuta = Object.assign({}, item);
@@ -436,6 +483,19 @@ export default {
         this.productosDevueltosLts = [];
         this.itemRuta.est_id = 0;
       }, 300)
+    },
+
+    abrirModalAddPago() {
+      setTimeout(() => {
+        this.pagoItem = Object.assign({}, this.pagoDefault);
+        $("#modalAgregarPago").modal('show');
+      }, 300);
+    },
+    cerrarModalAddPago() {
+      setTimeout(() => {
+        this.pagoItem = Object.assign({}, this.pagoDefault);
+        $("#modalAgregarPago").modal('hide');
+      }, 300);
     },
     getParametros() {
       let bodyFormData = new FormData();
@@ -549,6 +609,46 @@ export default {
         this.mostrarDescuento = false;
       }
     },
+    onChangeSelectEstado2(valor) {
+      var valueSelect = valor;
+
+      // pendiente
+      if (valueSelect == 1) {
+        this.mostrarProductosDev = false;
+        this.mostrarMotivoDev = false;
+        this.mostrarPagos = false;
+        this.mostrarDescuento = false;
+      } else if (valueSelect == 2) {
+        // entregado
+        this.mostrarProductosDev = false;
+        this.mostrarMotivoDev = false;
+        this.mostrarPagos = true;
+        this.mostrarDescuento = false;
+      } else if (valueSelect == 3) {
+        // devuelto
+        this.mostrarProductosDev = false;
+        this.mostrarMotivoDev = true;
+        this.mostrarPagos = false;
+        this.mostrarDescuento = true;
+      } else if (valueSelect == 4) {
+        // parcial
+        this.mostrarProductosDev = true;
+        this.mostrarMotivoDev = true;
+        this.mostrarPagos = true;
+        this.mostrarDescuento = true;
+      } else if (valueSelect == 5) {
+        // en ruta
+        this.mostrarProductosDev = false;
+        this.mostrarMotivoDev = false;
+        this.mostrarPagos = false;
+        this.mostrarDescuento = false;
+      } else {
+        this.mostrarProductosDev = false;
+        this.mostrarMotivoDev = false;
+        this.mostrarPagos = false;
+        this.mostrarDescuento = false;
+      }
+    },
     agregarPagoDetalle() {
 
       if (!this.pagoItem.tipo || !this.pagoItem.monto) {
@@ -560,7 +660,7 @@ export default {
         }
         this.pagosDetalleLts.push(this.pagoItem);
 
-        this.pagoItem = Object.assign({}, this.pagoDefault);
+        this.cerrarModalAddPago();
 
       }
 
