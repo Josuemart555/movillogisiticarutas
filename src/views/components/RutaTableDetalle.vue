@@ -73,7 +73,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modalDetalleRuta" tabindex="-1">
+    <div class="modal fade" id="modalDetalleRuta" tabindex="-1" data-dismiss="modal" data-toggle="modal" >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -138,49 +138,6 @@
                   </tbody>
                 </table>-->
 
-                <div class="modal fade" id="modalAgregarPago" data-toggle="modal" data-backdrop="static" data-keyboard="false">
-                  <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Agregar Pago </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="col-12 row container">
-                          <div class="col-12 ">
-                            <div class="col-md-6">
-                              <label for="example-text-input" class="form-control-label">Tipo</label>
-                              <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" >
-                                <option value="">-- Seleccionar --</option>
-                                <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" :selected="pago.tip_id === pago.tipo">{{ pago.tip_nom }}</option>
-                              </select>
-                            </div>
-                            <div class="col-md-6">
-                              <label for="example-text-input" class="form-control-label">Monto</label>
-                              <input type="number" name="monto-pago" v-model="pagoItem.monto" class="form-control" >
-                            </div>
-                            <div class="col-md-6">
-
-                              <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
-                              <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
-                                <i class="fas fa-camera"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrarModalAddPago()" >
-                          Cancelar
-                        </button>
-                        <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
-                          Guardar
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
                 <table class="table table-condensed">
                   <thead>
                   <tr>
@@ -220,12 +177,13 @@
                   <h4>Productos devueltos </h4>
                 </div>
                 <div class="col-4">
-                  <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarProductoDevolucion()" >
+                  <button class="btn btn-primary btn-sm" type="button" @click.prevent="abrirModalAddProductoDev()" >
                     <i class="fas fa-plus"></i>
                   </button>
                 </div>
               </div>
-              <table class="table table-condensed">
+
+              <!--<table class="table table-condensed">
                 <thead>
                 <tr>
                   <th>Producto</th>
@@ -237,7 +195,7 @@
                 <tr id="linea-dev-" name="linea-dev">
                   <td class="has-success">
                     <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" >
-                      <option value="">-- Seleccionar --</option>
+                      <option value="">&#45;&#45; Seleccionar &#45;&#45;</option>
                       <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
                     </select>
                   </td>
@@ -247,7 +205,8 @@
                   </td>
                 </tr>
                 </tbody>
-              </table>
+              </table>-->
+
               <table class="table table-condensed">
                 <thead>
                 <tr>
@@ -318,6 +277,86 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click.prevent="closeModal()">Cerrar</button>
             <button type="button" class="btn btn-primary" @click.prevent="guardarEstadoRutaDetalle()">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalAgregarProductoDev" data-backdrop="static" data-dismiss="modal" data-toggle="modal" tabindex="-1" >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar Producto Devuelto</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="col-12 row container">
+              <div class="col-12 ">
+                <div class="col-md-6">
+                  <label for="example-text-input" class="form-control-label">Producto</label>
+                  <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" >
+                    <option value="">&#45;&#45; Seleccionar &#45;&#45;</option>
+                    <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="example-text-input" class="form-control-label">Cantidad</label>
+                  <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrarModalAddProductoDev()" >
+              Cancelar
+            </button>
+            <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarProductoDevolucion()" >
+              Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modalAgregarPago" tabindex="-1" data-dismiss="modal" data-toggle="modal" data-backdrop="static" style="background:
+    rgba(0,0,0,0.5);" >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar Pago </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="col-12 row container">
+              <div class="col-12 ">
+                <div class="col-md-6">
+                  <label for="example-text-input" class="form-control-label">Tipo</label>
+                  <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" >
+                    <option value="">-- Seleccionar --</option>
+                    <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" :selected="pago.tip_id === pago.tipo">{{ pago.tip_nom }}</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="example-text-input" class="form-control-label">Monto</label>
+                  <input type="number" name="monto-pago" v-model="pagoItem.monto" class="form-control" >
+                </div>
+                <div class="col-md-6">
+
+                  <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
+                  <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
+                    <i class="fas fa-camera"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-danger btn-sm" type="button" @click.prevent="cerrarModalAddPago()" >
+              Cancelar
+            </button>
+            <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >
+              Guardar
+            </button>
           </div>
         </div>
       </div>
@@ -489,12 +528,28 @@ export default {
       setTimeout(() => {
         this.pagoItem = Object.assign({}, this.pagoDefault);
         $("#modalAgregarPago").modal('show');
+        $("modalDetalleRuta").addClass("custom-class");
+      }, 300);
+    },
+    abrirModalAddProductoDev() {
+      setTimeout(() => {
+        this.productoDevItem = Object.assign({}, this.productoDevDefault);
+        $("#modalAgregarProductoDev").modal('show');
+        $("modalDetalleRuta").addClass("custom-class");
       }, 300);
     },
     cerrarModalAddPago() {
       setTimeout(() => {
         this.pagoItem = Object.assign({}, this.pagoDefault);
         $("#modalAgregarPago").modal('hide');
+        $("modalDetalleRuta").removeClass("custom-class");
+      }, 300);
+    },
+    cerrarModalAddProductoDev() {
+      setTimeout(() => {
+        this.productoDevItem = Object.assign({}, this.productoDevDefault);
+        $("#modalAgregarProductoDev").modal('hide');
+        $("modalDetalleRuta").removeClass("custom-class");
       }, 300);
     },
     getParametros() {
@@ -684,7 +739,7 @@ export default {
 
           this.productosDevueltosLts.push(this.productoDevItem);
 
-          this.productoDevItem = Object.assign({}, this.productoDevDefault);
+          this.cerrarModalAddProductoDev();
         }
 
       }
@@ -896,4 +951,8 @@ export default {
   },
 };
 </script>
+
+<style>
+
+</style>
   
