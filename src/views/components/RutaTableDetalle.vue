@@ -282,7 +282,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modalAgregarProductoDev" data-backdrop="static" data-dismiss="modal" data-toggle="modal" tabindex="-1" >
+    <div class="modal fade" id="modalAgregarProductoDev" tabindex="-1" data-dismiss="modal" data-toggle="modal" >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -318,8 +318,7 @@
       </div>
     </div>
 
-    <div class="modal fade" id="modalAgregarPago" tabindex="-1" data-dismiss="modal" data-toggle="modal" data-backdrop="static" style="background:
-    rgba(0,0,0,0.5);" >
+    <div class="modal fade" id="modalAgregarPago" tabindex="-1" data-dismiss="modal" data-toggle="modal" >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -331,21 +330,23 @@
               <div class="col-12 ">
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label">Tipo</label>
-                  <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" >
+                  <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" @change="changeSelectTipoPago($event)" >
                     <option value="">-- Seleccionar --</option>
                     <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" :selected="pago.tip_id === pago.tipo">{{ pago.tip_nom }}</option>
                   </select>
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label">Monto</label>
-                  <input type="number" name="monto-pago" v-model="pagoItem.monto" class="form-control" >
+                  <input type="number" name="monto-pago" id="monto-pago" v-model="pagoItem.monto" class="form-control" >
                 </div>
                 <div class="col-md-6">
-
-                  <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
-                  <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
-                    <i class="fas fa-camera"></i>
-                  </button>
+                  <label for="example-text-input" class="form-control-label">Adjuntar Foto</label>
+                  <div class="form-control-plaintext text-center">
+                    <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
+                    <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
+                      <i class="fas fa-camera"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -368,6 +369,14 @@
 <script>
 import axios from 'axios';
 import $ from 'jquery';
+
+$(".modal").on("shown.bs.modal", function () {
+  console.log("entro on modal")
+  if ($(".modal-backdrop").length > 1) {
+    console.log("entro modal backdrop")
+    $(".modal-backdrop").not(':first').remove();
+  }
+})
 
 export default {
   name: "ruta-detalle-table",
@@ -508,8 +517,7 @@ export default {
       this.getDetalleRuta(item);
       this.itemRuta.est_id = item.rut_est_id;
       this.onChangeSelectEstado2(item.rut_est_id);
-      console.log(" opneModal = ", item.pagos);
-      for (const pago of item.pagos) {
+      for (const pago of item.pagos ?? []) {
         var pag = {
           tipo: pago.tip_pag_id,
           monto: pago.pag_mon
@@ -938,6 +946,10 @@ export default {
     },
     formatearMoneda(valor) {
       return new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(valor);
+    },
+    changeSelectTipoPago(event) {
+      console.log(event);
+      $("#monto-pago").focus();
     }
   },
   computed: {
@@ -962,6 +974,8 @@ export default {
 </script>
 
 <style>
-
+.modal + .modal {
+  background: rgba(0, 0, 0, 0.6);
+}
 </style>
   
