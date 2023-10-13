@@ -508,6 +508,15 @@ export default {
       this.getDetalleRuta(item);
       this.itemRuta.est_id = item.rut_est_id;
       this.onChangeSelectEstado2(item.rut_est_id);
+      console.log(" opneModal = ", item.pagos);
+      for (const pago of item.pagos) {
+        var pag = {
+          tipo: pago.tip_pag_id,
+          monto: pago.pag_mon
+        }
+        this.pagosDetalleLts.push(pag);
+      }
+      // this.pagosDetalleLts = item.pagos;
       setTimeout(() => {
         $("#modalDetalleRuta").modal('show');
         this.detalleRuta = Object.assign({}, item);

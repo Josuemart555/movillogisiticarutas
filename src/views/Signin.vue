@@ -152,7 +152,7 @@ export default {
         } else {
           this.mostrarAlertSeucce = false;
           this.error = true;
-          this.error_msg = data.data.error;
+          this.error_msg = data.data.titulo ? data.data.error : data.data.error;
         }
       }).catch( err => {
         alert(err);
