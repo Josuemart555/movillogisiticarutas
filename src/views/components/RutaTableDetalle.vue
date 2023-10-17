@@ -271,7 +271,7 @@
             <div class="form-group">
               <hr>
               <label>Observación</label>
-              <textarea class="form-control" id="obs-estado" v-model="detalleRuta.rut_obs" ></textarea>
+              <textarea class="form-control" id="obs-estado" v-model="itemRuta.obs" ></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -294,14 +294,14 @@
               <div class="col-12 ">
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label">Producto</label>
-                  <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" >
+                  <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" @change="changeSelectProductoDevolucion($event)" >
                     <option value="">&#45;&#45; Seleccionar &#45;&#45;</option>
                     <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
                   </select>
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label">Cantidad</label>
-                  <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
+                  <input type="number" name="cant-dev" id="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
                 </div>
               </div>
             </div>
@@ -516,6 +516,7 @@ export default {
 
       this.getDetalleRuta(item);
       this.itemRuta.est_id = item.rut_est_id;
+      this.itemRuta.obs = item.rut_obs;
       this.onChangeSelectEstado2(item.rut_est_id);
       for (const pago of item.pagos ?? []) {
         var pag = {
@@ -887,6 +888,7 @@ export default {
       }
       bodyFormData.append("dev", this.itemRuta.motivo_dev);
       bodyFormData.append("soporteDev", this.itemRuta.soporte);
+      bodyFormData.append("obs", this.itemRuta.obs);
 
       for (let i = 0; i < this.pagosDetalleLts.length; i++) {
         const pago = this.pagosDetalleLts[i];
@@ -950,6 +952,10 @@ export default {
     changeSelectTipoPago(event) {
       console.log(event);
       $("#monto-pago").focus();
+    },
+    changeSelectProductoDevolucion(event) {
+      console.log(event);
+      $("#cant-dev").focus();
     }
   },
   computed: {
