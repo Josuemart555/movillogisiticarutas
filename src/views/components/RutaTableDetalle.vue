@@ -60,7 +60,7 @@
               <span class="text-secondary text-xs font-weight-bold">{{ detalle.estado.est_nom }}</span>
             </td>
             <td class="align-middle text-center">
-              <span class="text-secondary text-xs font-weight-bold">{{ formatearMoneda(detalle.rut_mon_pag) }}</span>
+              <span class="text-secondary text-xs font-weight-bold">{{ formatearMoneda(detalle.pagos_sum_pag_mon) }}</span>
             </td>
             <td class="align-middle">
               <button type="button" v-bind:class="claseBotonRutaDetalle(detalle)" @click.prevent="openModal(detalle)" >
@@ -86,7 +86,7 @@
           <div class="modal-body">
             <div class="mb-3">
               <label class="form-label">Estado:</label>
-              <select class="form-select" v-model="itemRuta.est_id" @change="onChangeSelectEstado($event)">
+              <select class="form-select" v-model="itemRuta.rut_est_id" @change="onChangeSelectEstado($event)">
                 <option v-for="estado in estados" :key="estado.est_id" :value="estado.est_id">{{ estado.est_nom }}</option>
               </select>
             </div>
@@ -98,46 +98,11 @@
                     <h4>Pagos </h4>
                   </div>
                   <div class="col-4">
-                    <!--<button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarPagoDetalle()" >-->
                     <button class="btn btn-primary btn-sm" type="button" @click.prevent="abrirModalAddPago()" >
                       <i class="fas fa-plus"></i>
                     </button>
                   </div>
                 </div>
-
-                <!--<table class="table table-condensed">
-                  <thead>
-                  <tr>
-                    <th>Tipo pago</th>
-                    <th>Monto</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody id="opc-pago-body">
-                  <tr id="linea-pago-" name="linea-pago" >
-                    <td class="has-success">
-                      &lt;!&ndash;@change="validarSelectPago($event)"&ndash;&gt;
-                      <select class="form-control" name="pago-estado" v-model="pagoItem.tipo" >
-                        <option value="">&#45;&#45; Seleccionar &#45;&#45;</option>
-                        <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" :selected="pago.tip_id === pago.tipo">{{ pago.tip_nom }}</option>
-                      </select>
-                    </td>
-                    <td class="has-success">
-                      &lt;!&ndash;onchange="validarInput(this)"&ndash;&gt;
-                      <input type="number" name="monto-pago" v-model="pagoItem.monto" class="form-control" >
-                    </td>
-                    <td style="display: inline-flex">
-                      <input type="hidden" name="id-pago" value="">
-                      &lt;!&ndash;onchange="validarSoporte(this, '')"&ndash;&gt;
-                      <input type="file" id="soporte" class="visually-hidden" accept="image/*" @change="onSelectFile($event)" >
-                      <button class="btn btn-info btn-sm" type="button" onclick="$('#soporte').click()" >
-                        <i class="fas fa-camera"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>-->
-
                 <table class="table table-condensed">
                   <thead>
                   <tr>
@@ -149,14 +114,12 @@
                   <tbody id="opc-pago-body">
                   <tr id="linea-pago-" name="linea-pago" v-for="pago in pagosDetalleLts" :key="pago.id">
                     <td class="has-success">
-                      <!--@change="validarSelectPago($event)"-->
                       <select class="form-control" name="pago-estado" v-model="pago.tipo" :disabled="true" >
                         <option value="">-- Seleccionar --</option>
                         <option v-for="pago in pagos" :key="pago.tip_id" :value="pago.tip_id" >{{ pago.tip_nom }}</option>
                       </select>
                     </td>
                     <td class="has-success">
-                      <!--onchange="validarInput(this)"-->
                       <input type="text" name="monto-pago" :value="formatearMoneda(pago.monto)" class="form-control" :disabled="true" >
                     </td>
                     <td style="display: inline-flex">
@@ -182,31 +145,6 @@
                   </button>
                 </div>
               </div>
-
-              <!--<table class="table table-condensed">
-                <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Cant</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody id="opc-dev-body">
-                <tr id="linea-dev-" name="linea-dev">
-                  <td class="has-success">
-                    <select class="form-control" name="dev-prod" v-model="productoDevItem.prod" >
-                      <option value="">&#45;&#45; Seleccionar &#45;&#45;</option>
-                      <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
-                    </select>
-                  </td>
-                  <td class="has-success">
-                    <input type="number" name="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
-                    <input type="hidden" name="val-dev" id="val-dev" value="">
-                  </td>
-                </tr>
-                </tbody>
-              </table>-->
-
               <table class="table table-condensed">
                 <thead>
                 <tr>
@@ -218,16 +156,13 @@
                 <tbody id="opc-dev-body">
                 <tr id="linea-dev" name="linea-dev" v-for="productoDev in productosDevueltosLts" :key="productoDev.pro">
                   <td class="has-success">
-                    <!-- onchange="validarSinRepetir(this)" -->
                     <select class="form-control" name="dev-prod" id="dev-prod" v-model="productoDev.prod" :disabled="true" >
                       <option value="">-- Seleccionar --</option>
                       <option v-for="producto in productosDetalleRutaLts" :key="producto.KOPRCT" :value="producto.KOPRCT">{{ producto.NOKOPR }}</option>
                     </select>
                   </td>
                   <td class="has-success">
-                    <!-- onchange="validarInput(this)" -->
                     <input type="number" class="form-control" v-model="productoDev.cant" max="" :disabled="true" >
-                    <!-- <input type="hidden" name="val-dev" id="val-dev"  value=""> -->
                   </td>
                   <td style="display: inline-flex">
                     <button class="btn btn-danger btn-sm" title="Eliminar devolución" type="button" @click.prevent="eliminarProductoDev(productoDev)" >
@@ -246,7 +181,6 @@
                   <tbody>
                   <tr>
                     <td class="form-group has-success">
-                      <!-- onchange="validarInput(this)"  -->
                       <select class="form-control" id="devolucion-estado" v-model="itemRuta.motivo_dev" >
                         <option value="">-- Seleccionar --</option>
                         <option v-for="motivo in motivos" :key="motivo.mot_id" :value="motivo.mot_id">{{ motivo.mot_nom }}</option>
@@ -271,7 +205,7 @@
             <div class="form-group">
               <hr>
               <label>Observación</label>
-              <textarea class="form-control" id="obs-estado" v-model="itemRuta.obs" ></textarea>
+              <textarea class="form-control" id="obs-estado" v-model="itemRuta.rut_obs" ></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -301,7 +235,7 @@
                 </div>
                 <div class="col-md-6">
                   <label for="example-text-input" class="form-control-label">Cantidad</label>
-                  <input type="number" name="cant-dev" id="cant-dev" class="form-control" v-model="productoDevItem.cant" max="" >
+                  <input type="number" name="cant-dev" id="cantidad-devolucion" class="form-control" v-model="productoDevItem.cant" >
                 </div>
               </div>
             </div>
@@ -460,33 +394,6 @@ export default {
           .then( data => {
             if (data.data.exito) {
               this.detallesRutas = data.data.docs;
-              for (let index = 0; index < this.detallesRutas.length; index++) {
-                const element = this.detallesRutas[index];
-
-                let bodyFormData2 = new FormData();
-                bodyFormData2.append("usr_id", localStorage.getItem("usr_id"));
-                bodyFormData2.append("api_key", localStorage.getItem("token"));
-                bodyFormData2.append("id", element.rut_det_id);
-                axios.post(process.env.VUE_APP_API_URL+'rutas/getPagos', bodyFormData2)
-                .then( data => {
-                  if (data.data.exito) {
-                    element.pagos = data.data.pagos;
-                    var suma = 0;
-                    for (const pago of element.pagos) {
-                      suma += pago.pag_mon;
-                    }
-                    element.rut_mon_pag = suma;
-                  } else {
-                    this.$swal.fire({
-                      icon: "error",
-                      title: "Error al obtener pagos",
-                      text: false,
-                      timer: false
-                    });
-                    element.pagos = [];
-                  }
-                });
-              }
               this.$swal.fire({
                 icon: "info",
                 title: "Ruta Detalles Obtenidas",
@@ -515,17 +422,6 @@ export default {
     openModal (item) {
 
       this.getDetalleRuta(item);
-      this.itemRuta.est_id = item.rut_est_id;
-      this.itemRuta.obs = item.rut_obs;
-      this.onChangeSelectEstado2(item.rut_est_id);
-      for (const pago of item.pagos ?? []) {
-        var pag = {
-          tipo: pago.tip_pag_id,
-          monto: pago.pag_mon
-        }
-        this.pagosDetalleLts.push(pag);
-      }
-      // this.pagosDetalleLts = item.pagos;
       setTimeout(() => {
         $("#modalDetalleRuta").modal('show');
         this.detalleRuta = Object.assign({}, item);
@@ -541,7 +437,6 @@ export default {
         this.itemRuta.est_id = 0;
       }, 300)
     },
-
     abrirModalAddPago() {
       setTimeout(() => {
         this.pagoItem = Object.assign({}, this.pagoDefault);
@@ -622,8 +517,31 @@ export default {
       axios.post(process.env.VUE_APP_API_URL+'rutas/detalleDoc', bodyFormData)
           .then( data => {
             if (data.data.exito) {
+              console.log("data = ", data);
               this.productosDetalleRutaLts = data.data.detalle;
+              this.itemRuta = data.data.guardado;
+              this.onChangeSelectEstado2(this.itemRuta.rut_est_id);
+              if (data.data.guardado.pagos) {
+                for (const pago of data.data.guardado.pagos) {
+                  console.log(pago);
+                  let pag = {
+                    tipo: pago.tip_pag_id,
+                    monto: pago.pag_mon
+                  };
+                  this.pagosDetalleLts.push(pag);
+                }
+              }
+              if (data.data.guardado.devs) {
+                for (const devolucion of data.data.guardado.devs) {
+                  let dev = {
+                    prod: devolucion.prod_cod,
+                    cant: devolucion.prod_cant
+                  };
+                  this.productosDevueltosLts.push(dev);
+                }
+              }
             } else {
+              this.pagosDetalleLts = [];
               this.productosDetalleRutaLts = [];
               this.$swal.fire({
                 icon: "error",
@@ -909,6 +827,7 @@ export default {
       axios.post(process.env.VUE_APP_API_URL+'rutas/cambioEstadoDelPedido', bodyFormData)
           .then( data => {
             if (data.data.exito) {
+              console.log(" guarda " + data);
               this.$swal.close();
               this.$swal.fire({
                 position: 'top-end',
@@ -918,8 +837,8 @@ export default {
                 timer: 1500
               });
               this.closeModal();
-              this.detallesRutas = [];
-              this.getDetalleRutas();
+              // this.detallesRutas = [];
+              // this.getDetalleRutas();
             }
           }).catch( err => {
         console.error(err)
@@ -955,7 +874,7 @@ export default {
     },
     changeSelectProductoDevolucion(event) {
       console.log(event);
-      $("#cant-dev").focus();
+      $("#cantidad-devolucion").focus();
     }
   },
   computed: {
