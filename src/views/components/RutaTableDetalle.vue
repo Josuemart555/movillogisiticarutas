@@ -3,15 +3,6 @@
     <div class="card-header pb-0">
       <div class="pe-md-3 d-flex align-items-center ms-md-auto">
         <div class="input-group">
-          <!-- <input
-            type="date"
-            class="form-control"
-            v-model="fechaInput"
-            @keydown.enter.prevent="obtenerRutas()"
-          />
-          <button class="btn btn-sm mb-0 shadow-sm input-group-text" @click="obtenerRutas">
-            <i class="fas fa-search" aria-hidden="true"></i>
-          </button> -->
           <a :href="'/rutas'" class="btn btn-primary btn-sm" >
             <i class="fas fa-arrow-left"></i>
           </a>
@@ -305,9 +296,7 @@ import axios from 'axios';
 import $ from 'jquery';
 
 $(".modal").on("shown.bs.modal", function () {
-  console.log("entro on modal")
   if ($(".modal-backdrop").length > 1) {
-    console.log("entro modal backdrop")
     $(".modal-backdrop").not(':first').remove();
   }
 })
@@ -517,13 +506,11 @@ export default {
       axios.post(process.env.VUE_APP_API_URL+'rutas/detalleDoc', bodyFormData)
           .then( data => {
             if (data.data.exito) {
-              console.log("data = ", data);
               this.productosDetalleRutaLts = data.data.detalle;
               this.itemRuta = data.data.guardado;
               this.onChangeSelectEstado2(this.itemRuta.rut_est_id);
               if (data.data.guardado.pagos) {
                 for (const pago of data.data.guardado.pagos) {
-                  console.log(pago);
                   let pag = {
                     tipo: pago.tip_pag_id,
                     monto: pago.pag_mon
@@ -826,8 +813,8 @@ export default {
 
       axios.post(process.env.VUE_APP_API_URL+'rutas/cambioEstadoDelPedido', bodyFormData)
           .then( data => {
+            this.closeModal();
             if (data.data.exito) {
-              console.log(" guarda " + data);
               this.$swal.close();
               this.$swal.fire({
                 position: 'top-end',
@@ -836,13 +823,23 @@ export default {
                 showConfirmButton: false,
                 timer: 1500
               });
-              this.closeModal();
-              // this.detallesRutas = [];
-              // this.getDetalleRutas();
+            } else {
+              this.$swal.fire({
+                icon: "info",
+                title: "Error al Guardar",
+                text: false,
+                timer: false
+              });
             }
-          }).catch( err => {
+      }).catch( err => {
         console.error(err)
         this.$swal.close();
+        this.$swal.fire({
+          icon: "info",
+          title: "Error al Guardar",
+          text: false,
+          timer: false
+        });
       });
 
     },

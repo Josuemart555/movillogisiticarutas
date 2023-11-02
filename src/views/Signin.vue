@@ -2,11 +2,6 @@
   <div class="container top-0 position-sticky z-index-sticky">
     <div class="row">
       <div class="col-12">
-        <!-- <navbar
-          isBlur="blur  border-radius-lg my-3 py-2 start-0 end-0 mx-4 shadow"
-          v-bind:darkMode="true"
-          isBtn="bg-gradient-success"
-        /> -->
       </div>
     </div>
   </div>
@@ -49,15 +44,6 @@
                     </div>
                   </form>
                 </div>
-                <!-- <div class="px-1 pt-0 text-center card-footer px-lg-2">
-                  <p class="mx-auto mb-4 text-sm">
-                    Don't have an account?
-                    <a
-                      href="javascript:;"
-                      class="text-success text-gradient font-weight-bold"
-                    >Sign up</a>
-                  </p>
-                </div> -->
               </div>
             </div>
             <div
@@ -69,12 +55,6 @@
                 background-size: cover;"
               >
                 <span class="mask bg-gradient-success opacity-6"></span>
-                <!-- <h4
-                  class="mt-5 text-white font-weight-bolder position-relative"
-                >"Attention is the new currency"</h4> -->
-                <!-- <p
-                  class="text-white position-relative"
-                >The more effortless the writing looks, the more effort the writer actually put into the process.</p> -->
               </div>
             </div>
           </div>
@@ -85,9 +65,6 @@
 </template>
 
 <script>
-//import Navbar from "@/examples/PageLayout/Navbar.vue";
-// import ArgonInput from "@/components/ArgonInput.vue";
-// import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 const body = document.getElementsByTagName("body")[0];
 
@@ -97,9 +74,6 @@ import ArgonAlert from "@/components/ArgonAlert.vue";
 export default {
   name: "signin",
   components: {
-    //Navbar,
-    // ArgonInput,
-    // ArgonSwitch,
     ArgonButton,
     ArgonAlert
   },

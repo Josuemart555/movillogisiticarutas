@@ -157,35 +157,6 @@
                   </div>
                 </div>
               </div>
-
-              <!--<table class="table table-sm table-condensed">-->
-              <!--  <thead>-->
-              <!--  <tr>-->
-              <!--    <th>No Dep</th>-->
-              <!--    <th>Fecha/Hora</th>-->
-              <!--    <th>Monto</th>-->
-              <!--    <th></th>-->
-              <!--  </tr>-->
-              <!--  </thead>-->
-              <!--  <tbody id="opc-dev-body">-->
-              <!--  <tr id="linea-dev-" name="linea-dev">-->
-              <!--    <td class="has-success">-->
-              <!--      <input type="text" class="form-control" v-model="depositoMaeItem.num" >-->
-              <!--    </td>-->
-              <!--    <td class="has-success">-->
-              <!--      <input type="date" class="form-control" v-model="depositoMaeItem.fec" >-->
-              <!--    </td>-->
-              <!--    <td class="has-success">-->
-              <!--      <input type="number" class="form-control" v-model="depositoMaeItem.mon" >-->
-              <!--    </td>-->
-              <!--    <td style="display: inline-flex">-->
-              <!--      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarDepositoMae()" >-->
-              <!--        <i class="fas fa-plus"></i>-->
-              <!--      </button>-->
-              <!--    </td>-->
-              <!--  </tr>-->
-              <!--  </tbody>-->
-              <!--</table>-->
               <table class="table table-condensed">
                 <tbody id="opc-dev-body">
                   <tr id="linea-dev" name="linea-dev" v-for="depositoMae in depositosMaeLts" :key="depositoMae.num">
@@ -265,35 +236,6 @@
                     </div>
                   </div>
                 </div>
-
-                <!--<table class="table table-sm table-condensed">-->
-                <!--  <thead>-->
-                <!--  <tr>-->
-                <!--    <th>Terminal</th>-->
-                <!--    <th>Fecha/Hora</th>-->
-                <!--    <th>Monto</th>-->
-                <!--    <th></th>-->
-                <!--  </tr>-->
-                <!--  </thead>-->
-                <!--  <tbody id="opc-dev-body">-->
-                <!--  <tr id="linea-dev-" name="linea-dev">-->
-                <!--    <td class="has-success">-->
-                <!--      <input type="text" class="form-control" v-model="cierreTransBankItem.cod" >-->
-                <!--    </td>-->
-                <!--    <td class="has-success">-->
-                <!--      <input type="date" class="form-control" v-model="cierreTransBankItem.fec" >-->
-                <!--    </td>-->
-                <!--    <td class="has-success">-->
-                <!--      <input type="number" class="form-control" v-model="cierreTransBankItem.mon" >-->
-                <!--    </td>-->
-                <!--    <td style="display: inline-flex">-->
-                <!--      <button class="btn btn-primary btn-sm" type="button" @click.prevent="agregarCierreTransBank()" >-->
-                <!--        <i class="fas fa-plus"></i>-->
-                <!--      </button>-->
-                <!--    </td>-->
-                <!--  </tr>-->
-                <!--  </tbody>-->
-                <!--</table>-->
                 <table class="table table-condensed table-responsive table-bordered">
                   <tbody id="opc-dev-body">
                     <tr id="linea-dev" name="linea-dev" v-for="cierreTransBank in cierresTransBankLts" :key="cierreTransBank.cod">
@@ -482,7 +424,6 @@
             </div>
           </div>
           <div class="modal-footer">
-            <!-- <button type="button" class="btn btn-primary" @click.prevent="redireccionACierre()">Aceptar</button> -->
             <a class="btn btn-primary" :href="'/ruta/cierre/'+this.$route.params.id" >Aceptar</a>
           </div>
         </div>
@@ -678,7 +619,6 @@ export default {
                 }
                 this.cierresTransBankLts.push(tb);
               }
-              // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
             }
           });
 
@@ -744,7 +684,6 @@ export default {
           setTimeout( function () {
             $("#modalResuemnCierre").modal('show');
           }, 500);
-          // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
         }
       }).catch( err => {
         console.error(err)
@@ -769,9 +708,6 @@ export default {
       setTimeout(() => {
         this.$router.push({ name: 'Cierre', params: { id: rut_id } });
       }, 300);
-      // this.$router.push({ name: 'Cierre', params: { id: rut_id } });
-      // window.location.href = 'http://localhost:8080/ruta/cierre/'+rut_id;
-
     },
     formatearMoneda(valor) {
       return new Intl.NumberFormat('es-CL', {currency: 'CLP', style: 'currency'}).format(valor);

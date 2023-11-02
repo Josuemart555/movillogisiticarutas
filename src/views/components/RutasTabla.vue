@@ -132,12 +132,12 @@
                     });
                 } else {
                     this.rutas = [];
-                  this.$swal.fire({
-                    icon: "info",
-                    title: "No se encontraron rutas",
-                    text: false,
-                    timer: false
-                  });
+                    this.$swal.fire({
+                      icon: "info",
+                      title: "No se encontraron rutas",
+                      text: false,
+                      timer: false
+                    });
                 }
             }).catch( err => {
               this.$swal.fire({
@@ -148,7 +148,6 @@
               });
             });
             this.$swal.close();
-            
         },
         verRuta(rutaId) {
             this.$router.push({ name: 'RutaDetalle', params: { id: rutaId } });
